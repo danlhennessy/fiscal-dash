@@ -43,16 +43,20 @@ def main():
 
     category_expenses = expenses.groupby("category")["amount"].sum()
 
+    # Create a pie chart for the monthly expenses
     fig, ax = plt.subplots()
-    ax.pie(category_expenses, labels=category_expenses.index, autopct="%1.1f%%")
-    ax.axis("equal")
+    ax.pie(category_expenses, labels=category_expenses.index, autopct=lambda pct: func(pct, category_expenses),
+           startangle=90)
+    ax.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle
+    ax.set_title("Monthly Expense Distribution")
     st.pyplot(fig)
 
-    st.header("Monthly Expenses")
-    if not expenses.empty:
-        st.dataframe(expenses)
-    else:
-        st.info("No expenses recorded.")
+    with st.expander("Expenses Raw Dataframe"):
+        st.header("Monthly Expenses")
+        if not expenses.empty:
+            st.dataframe(expenses)
+        else:
+            st.info("No expenses recorded.")
 
 
 def get_category_list(conn):
@@ -74,6 +78,11 @@ def remove_expense(cursor, selected_expense, conn):
     cursor.execute("DELETE FROM expenses WHERE id=?", (selected_expense,))
     conn.commit()
     st.sidebar.success("Expense removed successfully.")
+
+
+def func(pct, allvals):
+    absolute = int(pct / 100. * sum(allvals))
+    return "{:.1f}%\n({:d})".format(pct, absolute)
 
 
 if __name__ == "__main__":
