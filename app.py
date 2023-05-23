@@ -22,13 +22,13 @@ def main():
     category = st.sidebar.selectbox("Category", get_category_list(conn))
     if category == "New Category":
         custom_category = st.sidebar.text_input("Custom Category")
+    amount = st.sidebar.number_input("Amount", value=0.0, step=0.01, format="%.2f")
+
+    if st.sidebar.button("Add"):
         if custom_category:
             category = custom_category.strip()
             if category not in get_category_list(conn):
                 add_category(cursor, category, conn)
-    amount = st.sidebar.number_input("Amount", value=0.0, step=0.01, format="%.2f")
-
-    if st.sidebar.button("Add"):
         cursor.execute("INSERT INTO expenses (category, amount) VALUES (?, ?)", (category, amount))
         conn.commit()
         st.sidebar.success("Expense added successfully.")
@@ -70,7 +70,6 @@ def add_category(cursor, category, conn):
     cursor.execute("SELECT category FROM expenses WHERE category=?", (category,))
     existing_category = cursor.fetchone()
     if not existing_category:
-        cursor.execute("INSERT INTO expenses (category, amount) VALUES (?, ?)", (category, 0.0))
         conn.commit()
 
 
