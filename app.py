@@ -1,10 +1,16 @@
-import streamlit as st
-import pandas as pd
+""" Expense tracking application designed to manage a monthly budget,
+categorise outgoings and generate visualisations from the input data
+"""
+
 import sqlite3
 import matplotlib.pyplot as plt
+import pandas as pd
+import streamlit as st
 
 
 def main():
+    """ Main Streamlit function to organise and display the webapp
+    """
     st.title("Monthly Outgoings Dashboard")
 
     conn = sqlite3.connect("expenses.db")
@@ -54,14 +60,14 @@ def main():
     category_expenses = expenses.groupby("category")["amount"].sum()
 
     # Create a pie chart for the monthly expenses
-    fig, ax = plt.subplots()
-    ax.pie(
+    fig, axis = plt.subplots()
+    axis.pie(
         category_expenses,
         labels=category_expenses.index,
         autopct=lambda pct: func(pct, category_expenses),
         startangle=90
         )
-    ax.axis("equal")
+    axis.axis("equal")
     st.pyplot(fig)
 
     with st.expander("Expenses Raw Dataframe"):
@@ -73,6 +79,14 @@ def main():
 
 
 def get_category_list(conn):
+    """Displays all existing categories in database
+
+    Args:
+        conn (sqlite3.Connection): Database connection
+
+    Returns:
+        list: Category list
+    """
     cursor = conn.cursor()
     cursor.execute("SELECT DISTINCT category FROM expenses")
     stored_categories = [row[0] for row in cursor.fetchall()]
@@ -80,21 +94,40 @@ def get_category_list(conn):
 
 
 def add_category(cursor, category, conn):
-    cursor.execute("SELECT category FROM expenses WHERE category=?", (category,))
+    """Add a custom category to the database
+
+    Args:
+        cursor (sqlite3.Cursor): Database cursor
+        category (str): Expense category
+        conn (sqlite3.Connection): Database connection
+    """
+    cursor.execute(
+        "SELECT category FROM expenses WHERE category=?",
+        (category,)
+        )
     existing_category = cursor.fetchone()
     if not existing_category:
         conn.commit()
 
 
 def remove_expense(cursor, selected_expense, conn):
+    """Remove an expense from the database
+
+    Args:
+        cursor (sqlite3.Cursor): Database cursor
+        selected_expense (str): Current selected expense
+        conn (sqlite3.Connection): Database connection
+    """
     cursor.execute("DELETE FROM expenses WHERE id=?", (selected_expense,))
     conn.commit()
     st.sidebar.success("Expense removed successfully.")
 
 
 def func(pct, allvals):
+    """Calculate expense percentage of total
+    """
     absolute = int(pct / 100. * sum(allvals))
-    return "{:.1f}%\n({:d})".format(pct, absolute)
+    return f"{pct:.1f}%\n{absolute:d}"
 
 
 if __name__ == "__main__":
