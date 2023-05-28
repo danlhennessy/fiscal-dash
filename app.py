@@ -1,134 +1,109 @@
-""" Expense tracking application designed to manage a monthly budget,
-categorise outgoings and generate visualisations from the input data
-"""
+import uuid
+import requests
+from flask import Flask, render_template, session, request, redirect, url_for
+from flask_session import Session  # https://pythonhosted.org/Flask-Session
+import msal
+import app_config
+# This section is needed for url_for("foo", _external=True) to automatically
+# generate http scheme when this sample is running on localhost,
+# and to generate https scheme when it is deployed behind reversed proxy.
+# See also https://flask.palletsprojects.com/en/1.0.x/deploying/wsgi-standalone/#proxy-setups
+from werkzeug.middleware.proxy_fix import ProxyFix
 
-import sqlite3
-import matplotlib.pyplot as plt
-import pandas as pd
-import streamlit as st
+
+app = Flask(__name__)
+app.config.from_object(app_config)
+Session(app)
 
 
-def main():
-    """ Main Streamlit function to organise and display the webapp
-    """
-    st.title("Monthly Outgoings Dashboard")
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-    conn = sqlite3.connect("expenses.db")
-    cursor = conn.cursor()
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS expenses (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            category TEXT,
-            amount REAL
-        )
-    ''')
-
-    st.sidebar.header("Add Expense")
-    category = st.sidebar.selectbox("Category", get_category_list(conn))
-    if category == "Custom Category":
-        custom_category = st.sidebar.text_input("Custom Category")
-    amount = st.sidebar.number_input(
-        "Amount",
-        value=0.0,
-        step=0.01,
-        format="%.2f"
+@app.route("/")
+def index():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    return render_template(
+        'index.html',
+        user=session["user"],
+        version=msal.__version__
         )
 
-    if st.sidebar.button("Add"):
-        if custom_category:
-            category = custom_category.strip()
-            if category not in get_category_list(conn):
-                add_category(cursor, category, conn)
-        cursor.execute(
-            "INSERT INTO expenses (category, amount) VALUES (?, ?)",
-            (category, amount)
-            )
-        conn.commit()
-        st.sidebar.success("Expense added successfully.")
 
-    st.sidebar.header("Remove Expense")
-    expenses = pd.read_sql_query("SELECT * FROM expenses", conn)
-    if not expenses.empty:
-        selected_expense = st.sidebar.radio(
-            "Selected Expense",
-            expenses["id"])
-        if st.sidebar.button("Remove"):
-            remove_expense(cursor, selected_expense, conn)
-            expenses = pd.read_sql_query("SELECT * FROM expenses", conn)
-
-    category_expenses = expenses.groupby("category")["amount"].sum()
-
-    # Create a pie chart for the monthly expenses
-    fig, axis = plt.subplots()
-    axis.pie(
-        category_expenses,
-        labels=category_expenses.index,
-        autopct=lambda pct: func(pct, category_expenses),
-        startangle=90
+@app.route("/login")
+def login():
+    # Technically we could use empty list [] as scopes to do just sign in,
+    # here we choose to also collect end user consent upfront
+    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
+    return render_template(
+        "login.html",
+        auth_url=session["flow"]["auth_uri"],
+        version=msal.__version__
         )
-    axis.axis("equal")
-    st.pyplot(fig)
 
-    with st.expander("Expenses Raw Dataframe"):
-        st.header("Monthly Expenses")
-        if not expenses.empty:
-            st.dataframe(expenses)
-        else:
-            st.info("No expenses recorded.")
+@app.route(app_config.REDIRECT_PATH)  # Its absolute URL must match your app's redirect_uri set in AAD
+def authorized():
+    try:
+        cache = _load_cache()
+        result = _build_msal_app(cache=cache).acquire_token_by_auth_code_flow(
+            session.get("flow", {}), request.args)
+        if "error" in result:
+            return render_template("auth_error.html", result=result)
+        session["user"] = result.get("id_token_claims")
+        _save_cache(cache)
+    except ValueError:  # Usually caused by CSRF
+        pass  # Simply ignore them
+    return redirect(url_for("index"))
 
+@app.route("/logout")
+def logout():
+    session.clear()  # Wipe out user and its token cache from session
+    return redirect(  # Also logout from your tenant's web session
+        app_config.AUTHORITY + "/oauth2/v2.0/logout" +
+        "?post_logout_redirect_uri=" + url_for("index", _external=True))
 
-def get_category_list(conn):
-    """Displays all existing categories in database
-
-    Args:
-        conn (sqlite3.Connection): Database connection
-
-    Returns:
-        list: Category list
-    """
-    cursor = conn.cursor()
-    cursor.execute("SELECT DISTINCT category FROM expenses")
-    stored_categories = [row[0] for row in cursor.fetchall()]
-    return ["Custom Category"] + stored_categories
-
-
-def add_category(cursor, category, conn):
-    """Add a custom category to the database
-
-    Args:
-        cursor (sqlite3.Cursor): Database cursor
-        category (str): Expense category
-        conn (sqlite3.Connection): Database connection
-    """
-    cursor.execute(
-        "SELECT category FROM expenses WHERE category=?",
-        (category,)
-        )
-    existing_category = cursor.fetchone()
-    if not existing_category:
-        conn.commit()
+@app.route("/graphcall")
+def graphcall():
+    token = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+    graph_data = requests.get(  # Use token to call downstream service
+        app_config.ENDPOINT,
+        headers={'Authorization': 'Bearer ' + token['access_token']},
+        ).json()
+    return render_template('display.html', result=graph_data)
 
 
-def remove_expense(cursor, selected_expense, conn):
-    """Remove an expense from the database
+def _load_cache():
+    cache = msal.SerializableTokenCache()
+    if session.get("token_cache"):
+        cache.deserialize(session["token_cache"])
+    return cache
 
-    Args:
-        cursor (sqlite3.Cursor): Database cursor
-        selected_expense (str): Current selected expense
-        conn (sqlite3.Connection): Database connection
-    """
-    cursor.execute("DELETE FROM expenses WHERE id=?", (selected_expense,))
-    conn.commit()
-    st.sidebar.success("Expense removed successfully.")
+def _save_cache(cache):
+    if cache.has_state_changed:
+        session["token_cache"] = cache.serialize()
 
+def _build_msal_app(cache=None, authority=None):
+    return msal.ConfidentialClientApplication(
+        app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
+        client_credential=app_config.CLIENT_SECRET, token_cache=cache)
 
-def func(pct, allvals):
-    """Calculate expense percentage of total
-    """
-    absolute = int(pct / 100. * sum(allvals))
-    return f"{pct:.1f}%\n{absolute:d}"
+def _build_auth_code_flow(authority=None, scopes=None):
+    return _build_msal_app(authority=authority).initiate_auth_code_flow(
+        scopes or [],
+        redirect_uri=url_for("authorized", _external=True))
 
+def _get_token_from_cache(scope=None):
+    cache = _load_cache()  # This web app maintains one cache per session
+    cca = _build_msal_app(cache=cache)
+    accounts = cca.get_accounts()
+    if accounts:  # So all account(s) belong to the current signed-in user
+        result = cca.acquire_token_silent(scope, account=accounts[0])
+        _save_cache(cache)
+        return result
+
+app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
 if __name__ == "__main__":
-    main()
+    app.run()
