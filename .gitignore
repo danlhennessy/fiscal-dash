@@ -3,3 +3,4 @@ __pycache__/SessionState.cpython-310.pyc
 __pycache__/app_config.cpython-310.pyc
 flask_session/2029240f6d1128be89ddc32729463129
 app_config.py
+/flask_session
