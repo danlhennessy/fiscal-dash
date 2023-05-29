@@ -3,6 +3,7 @@ from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
 import matplotlib.pyplot as plt
 import msal
+import plotly.graph_objects as go
 import io
 import base64
 import app_config
@@ -101,6 +102,24 @@ def dashboard():
 
     # Render the template with the base64-encoded image data
     return render_template('dashboard.html', chart_base64=chart_base64, user=user)
+
+@app.route("/plotly")
+def plotly():
+    token, accounts = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+    # Chart data
+    labels = ['Label 1', 'Label 2', 'Label 3']
+    values = [30, 40, 30]
+
+    # Create pie chart
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.4)])
+
+    # Render the chart to an HTML string
+    chart_html = fig.to_html(full_html=False)
+
+    # Pass the chart HTML to the template
+    return render_template('plotly.html', chart_html=chart_html)
 
 
 def _load_cache():

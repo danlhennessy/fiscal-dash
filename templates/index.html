@@ -11,6 +11,7 @@
       <li><a href='/graphcall'>Call Microsoft Graph API</a></li>
     {% endif %}
       <li><a href='/dashboard'>Dashboard</a></li>
+      <li><a href='/plotly'>Plotly</a></li>
     {% if config.get("B2C_PROFILE_AUTHORITY") %}
       <li><a href='{{_build_auth_code_flow(authority=config["B2C_PROFILE_AUTHORITY"])["auth_uri"]}}'>Edit Profile</a></li>
     {% endif %}
