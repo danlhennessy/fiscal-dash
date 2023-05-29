@@ -3,6 +3,7 @@ from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
 import matplotlib.pyplot as plt
 import msal
+import mysql.connector
 import plotly.graph_objects as go
 import io
 import base64
@@ -20,6 +21,13 @@ Session(app)
 
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+conn = mysql.connector.connect(
+    host='localhost',
+    user=app_config.DB_USER,
+    password=app_config.DB_PASS,
+    database=app_config.DB_NAME
+)
 
 
 @app.route("/")
@@ -103,17 +111,47 @@ def dashboard():
     # Render the template with the base64-encoded image data
     return render_template('dashboard.html', chart_base64=chart_base64, user=user)
 
+
+@app.route('/update_piechart', methods=['POST'])
+def update_piechart():
+    cursor = conn.cursor()
+
+    # Get the values from the form submitted by the user
+    user = request.form.get('user')
+    category = request.form.get('category')
+    value = int(request.form.get('value'))
+
+    # Insert the form data into the database
+    query = "INSERT INTO pie_data (user, category, value) VALUES (%s, %s, %s)"
+    cursor.execute(query, (user, category, value))
+    conn.commit()
+
+    # Close the cursor
+    cursor.close()
+
+    # Redirect the user back to the pie chart page
+    return redirect('/plotly')
+
+
 @app.route("/plotly")
 def plotly():
     token, accounts = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
-    # Chart data
-    labels = ['Label 1', 'Label 2', 'Label 3']
-    values = [30, 40, 30]
+    cursor = conn.cursor()
+    # Fetch the data from the database
+    query = "SELECT id, user, category, value FROM pie_data"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    
+    print(app_config.SCOPE)
+
+    # Extract categories and values from the result
+    categories = [row[2] for row in result]
+    values = [row[3] for row in result]
 
     # Create pie chart
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=0.4)])
+    fig = go.Figure(data=[go.Pie(labels=categories, values=values, hole=0.4)])
 
     # Render the chart to an HTML string
     chart_html = fig.to_html(full_html=False)
