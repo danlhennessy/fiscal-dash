@@ -138,13 +138,12 @@ def plotly():
     token, accounts = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
+    
+    # Retrieve data from table in DB
     cursor = conn.cursor()
-    # Fetch the data from the database
     query = "SELECT id, user, category, value FROM pie_data"
     cursor.execute(query)
     result = cursor.fetchall()
-    
-    print(app_config.SCOPE)
 
     # Extract categories and values from the result
     categories = [row[2] for row in result]
