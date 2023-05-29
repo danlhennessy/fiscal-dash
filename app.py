@@ -1,7 +1,10 @@
 import requests
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
+import matplotlib.pyplot as plt
 import msal
+import io
+import base64
 import app_config
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
@@ -79,7 +82,24 @@ def new():
     token = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
-    return render_template('new.html')
+    labels = ['Category A', 'Category B', 'Category C']
+    values = [30, 50, 20]
+
+    # Create pie chart
+    fig, ax = plt.subplots()
+    ax.pie(values, labels=labels, autopct='%1.1f%%')
+    ax.set_title('Sample Pie Chart')
+
+    # Save the chart image as bytes in memory
+    chart_bytes = io.BytesIO()
+    plt.savefig(chart_bytes, format='png')
+    plt.close()
+
+    # Encode the chart image data to base64
+    chart_base64 = base64.b64encode(chart_bytes.getvalue()).decode('utf-8')
+
+    # Render the template with the base64-encoded image data
+    return render_template('new.html', chart_base64=chart_base64)
 
 
 def _load_cache():
