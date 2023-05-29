@@ -67,21 +67,22 @@ def logout():
 
 @app.route("/graphcall")
 def graphcall():
-    token = _get_token_from_cache(app_config.SCOPE)
+    token, accounts = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
     graph_data = requests.get(  # Use token to call downstream service
         app_config.ENDPOINT,
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
-    return render_template('display.html', result=graph_data)
+    return render_template('display.html', result=graph_data, accounts=accounts)
 
 
-@app.route("/new")
-def new():
-    token = _get_token_from_cache(app_config.SCOPE)
+@app.route("/dashboard")
+def dashboard():
+    token, accounts = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
+    user = (accounts[0]['username'])
     labels = ['Category A', 'Category B', 'Category C']
     values = [30, 50, 20]
 
@@ -99,7 +100,7 @@ def new():
     chart_base64 = base64.b64encode(chart_bytes.getvalue()).decode('utf-8')
 
     # Render the template with the base64-encoded image data
-    return render_template('new.html', chart_base64=chart_base64)
+    return render_template('dashboard.html', chart_base64=chart_base64, user=user)
 
 
 def _load_cache():
@@ -133,7 +134,7 @@ def _get_token_from_cache(scope=None):
     if accounts:  # So all account(s) belong to the current signed-in user
         result = cca.acquire_token_silent(scope, account=accounts[0])
         _save_cache(cache)
-        return result
+        return result, accounts
 
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
