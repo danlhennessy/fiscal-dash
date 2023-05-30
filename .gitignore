@@ -5,3 +5,5 @@ flask_session/2029240f6d1128be89ddc32729463129
 app_config.py
 /flask_session
 __pycache__/app.cpython-310.pyc
+tests/test_config.py
+tests/__pycache__/test_config.cpython-310.pyc
