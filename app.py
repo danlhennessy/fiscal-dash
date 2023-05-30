@@ -112,20 +112,17 @@ def dashboard():
 
 @app.route('/update_piechart', methods=['POST'])
 def update_piechart():
-    cursor = conn.cursor()
-
     # Get the values from the form submitted by the user
     user = request.form.get('user')
     category = request.form.get('category')
     value = int(request.form.get('value'))
 
-    # Insert the form data into the database
-    query = "INSERT INTO pie_data (user, category, value) VALUES (%s, %s, %s)"
-    cursor.execute(query, (user, category, value))
-    conn.commit()
-
-    # Close the cursor
-    cursor.close()
+    update_database(
+        table="pie_data",
+        keys=["user", "category", "value"],
+        values=[user, category, value],
+        connection=conn
+        )
 
     # Redirect the user back to the pie chart page
     return redirect('/plotly')
@@ -196,7 +193,17 @@ def retrieve_database(table: str, keys: list[str], connection: mysql.connector.M
     return cursor.fetchall()
 
 
-def update_database()
+def update_database(table: str, keys: list[str], values: list[str], connection: mysql.connector.MySQLConnection):
+    try:
+        cursor = connection.cursor()
+        placeholders = ','.join(['%s'] * len(keys))
+        query = f"INSERT INTO {table} ({','.join(keys)}) VALUES ({placeholders})"
+        cursor.execute(query, values)
+        conn.commit()
+        cursor.close()
+    except ValueError as updateDB_error:
+        print(f"Error: {updateDB_error}")
+
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
