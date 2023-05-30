@@ -18,8 +18,6 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 app = Flask(__name__)
 app.config.from_object(app_config)
 Session(app)
-
-
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 conn = mysql.connector.connect(
@@ -138,18 +136,16 @@ def plotly():
     token, accounts = _get_token_from_cache(app_config.SCOPE)
     if not token:
         return redirect(url_for("login"))
-    
-    # Retrieve data from table in DB
-    cursor = conn.cursor()
-    query = "SELECT id, user, category, value FROM pie_data"
-    cursor.execute(query)
-    result = cursor.fetchall()
 
-    # Extract categories and values from the result
+    result = retrieve_database(
+        table="pie_data",
+        keys=["id", "user", "category", "value"],
+        connection=conn
+        )
+
+    # Create pie chart using selected values from the database
     categories = [row[2] for row in result]
     values = [row[3] for row in result]
-
-    # Create pie chart
     fig = go.Figure(data=[go.Pie(labels=categories, values=values, hole=0.4)])
 
     # Render the chart to an HTML string
@@ -192,6 +188,15 @@ def _get_token_from_cache(scope=None):
         _save_cache(cache)
         return result, accounts
 
+
+def retrieve_database(table: str, keys: list[str], connection: mysql.connector.MySQLConnection):
+    cursor = connection.cursor()
+    query = f"SELECT {', '.join(keys)} FROM {table}"
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+def update_database()
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
