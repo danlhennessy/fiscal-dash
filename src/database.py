@@ -28,7 +28,7 @@ def retrieve_database(table: str,
 
 def update_database(table: str,
                     keys: list[str],
-                    values: list[str],
+                    values: list,
                     connection: mysql.connector.MySQLConnection):
     try:
         cursor = connection.cursor()

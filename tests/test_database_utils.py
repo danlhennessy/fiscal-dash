@@ -1,10 +1,10 @@
 import unittest
 import mysql.connector
 import tests.test_config as test_config
-from src.database import retrieve_database
+from src.database import retrieve_database, update_database
 
 
-class TestRetrieveDatabase(unittest.TestCase):
+class TestDatabase(unittest.TestCase):
     def setUp(self):
         self.connection = mysql.connector.connect(
             host='localhost',
@@ -12,7 +12,6 @@ class TestRetrieveDatabase(unittest.TestCase):
             password=test_config.DB_PASS,
             database=test_config.DB_NAME
         )
-        # Create a test table
         self.create_test_table()
 
     def tearDown(self):
@@ -29,6 +28,8 @@ class TestRetrieveDatabase(unittest.TestCase):
         cursor = self.connection.cursor()
         cursor.execute("DROP TABLE test_table")
 
+
+class TestRetrieveDatabase(TestDatabase):
     def test_retrieve_database(self):
         cursor = self.connection.cursor()
         cursor.execute(
@@ -46,6 +47,25 @@ class TestRetrieveDatabase(unittest.TestCase):
             )
 
         expected_result = [(1, 'John'), (2, 'Jane')]
+        self.assertEqual(result, expected_result)
+
+
+class TestUpdateDatabase(TestDatabase):
+    def test_retrieve_database(self):
+        update_database(
+            "test_table",
+            ["id", "name", "age"],
+            [1, "Dan", 30],
+            self.connection
+            )
+
+        result = retrieve_database(
+            "test_table",
+            ["id", "name", "age"],
+            self.connection
+            )
+
+        expected_result = [(1, 'Dan', 30)]
         self.assertEqual(result, expected_result)
 
 
