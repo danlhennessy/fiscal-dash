@@ -4,7 +4,7 @@ import logging
 if __name__ == "__main__":
     database.check_mysql_connection(database.FISCALDB)
 
-    debug_mode = True
+    debug_mode = False
     flask_app.app.debug = debug_mode
 
     log_file = 'logs/app.log'
