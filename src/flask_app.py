@@ -1,13 +1,12 @@
-import requests
+from src import app_config, database
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
+import requests
 import matplotlib.pyplot as plt
 import msal
-import mysql.connector
 import plotly.graph_objects as go
 import io
 import base64
-import src.app_config as app_config
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
 # and to generate https scheme when it is deployed behind reversed proxy.
@@ -19,13 +18,6 @@ app = Flask(__name__)
 app.config.from_object(app_config)
 Session(app)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
-
-conn = mysql.connector.connect(
-    host='localhost',
-    user=app_config.DB_USER,
-    password=app_config.DB_PASS,
-    database=app_config.DB_NAME
-)
 
 
 @app.route("/")
@@ -117,11 +109,11 @@ def update_piechart():
     category = request.form.get('category')
     value = int(request.form.get('value'))
 
-    update_database(
+    database.update_database(
         table="pie_data",
         keys=["user", "category", "value"],
         values=[user, category, value],
-        connection=conn
+        connection=database.FISCALDB
         )
 
     # Redirect the user back to the pie chart page
@@ -134,10 +126,10 @@ def plotly():
     if not token:
         return redirect(url_for("login"))
 
-    result = retrieve_database(
+    result = database.retrieve_database(
         table="pie_data",
         keys=["id", "user", "category", "value"],
-        connection=conn
+        connection=database.FISCALDB
         )
 
     # Create pie chart using selected values from the database
@@ -184,25 +176,6 @@ def _get_token_from_cache(scope=None):
         result = cca.acquire_token_silent(scope, account=accounts[0])
         _save_cache(cache)
         return result, accounts
-
-
-def retrieve_database(table: str, keys: list[str], connection: mysql.connector.MySQLConnection):
-    cursor = connection.cursor()
-    query = f"SELECT {', '.join(keys)} FROM {table}"
-    cursor.execute(query)
-    return cursor.fetchall()
-
-
-def update_database(table: str, keys: list[str], values: list[str], connection: mysql.connector.MySQLConnection):
-    try:
-        cursor = connection.cursor()
-        placeholders = ','.join(['%s'] * len(keys))
-        query = f"INSERT INTO {table} ({','.join(keys)}) VALUES ({placeholders})"
-        cursor.execute(query, values)
-        conn.commit()
-        cursor.close()
-    except ValueError as updateDB_error:
-        print(f"Error: {updateDB_error}")
 
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
