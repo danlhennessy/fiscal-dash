@@ -7,7 +7,7 @@ import mysql.connector
 import plotly.graph_objects as go
 import io
 import base64
-import app_config
+import src.app_config as app_config
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
 # and to generate https scheme when it is deployed behind reversed proxy.

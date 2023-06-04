@@ -1,15 +1,7 @@
 import unittest
 import mysql.connector
-import test_config
-
-
-def retrieve_database(table: str,
-                      keys: list[str],
-                      connection: mysql.connector.MySQLConnection):
-    cursor = connection.cursor()
-    query = f"SELECT {', '.join(keys)} FROM {table}"
-    cursor.execute(query)
-    return cursor.fetchall()
+import tests.test_config as test_config
+from src.app import retrieve_database
 
 
 class TestRetrieveDatabase(unittest.TestCase):
