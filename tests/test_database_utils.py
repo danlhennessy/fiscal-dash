@@ -1,7 +1,7 @@
 import unittest
 import mysql.connector
 import tests.test_config as test_config
-from src.flask_app import retrieve_database
+from src.database import retrieve_database
 
 
 class TestRetrieveDatabase(unittest.TestCase):
