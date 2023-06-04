@@ -9,6 +9,15 @@ FISCALDB = mysql.connector.connect(
 )
 
 
+def check_mysql_connection(connection):
+    try:
+        connection.ping(reconnect=True)
+        print("MySQL connection successful")
+        connection.close()
+    except Exception as e:
+        print("Error connecting to MySQL database:", str(e))
+
+
 def retrieve_database(table: str,
                       keys: list[str],
                       connection: mysql.connector.MySQLConnection):
