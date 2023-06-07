@@ -1,0 +1,26 @@
+# This workflow will pull dependencies from cache, check for new requirements and push back into cache. Then run a safety check
+
+name: App dependencies
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  sync_dependencies:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+    - uses: actions/checkout@v2
+    
+    - name: Setup Python and access pip cache
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+    
+    - name: Install dependencies
+    - run: pip install -r requirements.txt
+    
+    - name: Run safety on current dependencies
+    - run: safety check --file requirements.txt
