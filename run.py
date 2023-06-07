@@ -1,6 +1,6 @@
 from src import flask_app, database
 import logging
-
+# Testing workflow
 if __name__ == "__main__":
     database.check_mysql_connection(database.FISCALDB)
 
