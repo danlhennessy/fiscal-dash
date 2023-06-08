@@ -20,7 +20,7 @@ jobs:
         cache: 'pip'
     
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: pip install -r requirements/requirements-dev.txt
     
     - name: Run safety on current dependencies
-      run: safety check --file requirements.txt
+      run: safety check --file requirements/requirements-dev.txt
