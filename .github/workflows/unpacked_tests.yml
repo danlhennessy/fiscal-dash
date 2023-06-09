@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install testing dependencies
+        run: pip install flake8 pylint ruff
+
       - name: Checkout code
         uses: actions/checkout@v2
 
