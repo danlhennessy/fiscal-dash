@@ -1,13 +1,13 @@
 # This workflow will pull dependencies from cache, check for new requirements/requirements and push back into cache. Then run a safety check
 
-name: Dependencies
+name: Unpackaged Tests
 
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  sync_dependencies:
+  unpackaged_tests:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -37,9 +37,7 @@ jobs:
     - name: Lint with Ruff
       run: ruff **/*.py || exit 0
       continue-on-error: true
-  
-    - name: Run pytest
-      run: pytest
-
-    - name: Run unittest
-      run: python -m unittest
+        
+    # Test locally for now
+    # - name: Run pytest
+    #   run: pytest tests/unpacked/

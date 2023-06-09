@@ -106,7 +106,6 @@ def dashboard():
 
 @app.route('/update_piechart', methods=['POST'])
 def update_piechart():
-    # Get the values from the form submitted by the user
     user = request.form.get('user')
     category = request.form.get('category')
     value = int(request.form.get('value'))
@@ -118,7 +117,6 @@ def update_piechart():
         connection=database.FISCALDB
         )
 
-    # Redirect the user back to the pie chart page
     return redirect('/plotly')
 
 

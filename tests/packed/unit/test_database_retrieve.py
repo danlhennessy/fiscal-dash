@@ -1,5 +1,5 @@
 import unittest
-from tests.test_database import TestDatabase
+from tests.packed.test_database import TestDatabase
 from src.database import retrieve_database
 
 
