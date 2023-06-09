@@ -1,5 +1,6 @@
 Flask
 Flask-Session
+insecure-package
 matplotlib
 msal
 mysql-connector-python
