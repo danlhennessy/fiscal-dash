@@ -10,7 +10,6 @@ import base64
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
 # and to generate https scheme when it is deployed behind reversed proxy.
-# See also https://flask.palletsprojects.com/en/1.0.x/deploying/wsgi-standalone/#proxy-setups
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 
@@ -73,7 +72,11 @@ def graphcall():
         app_config.ENDPOINT,
         headers={'Authorization': 'Bearer ' + token['access_token']},
         ).json()
-    return render_template('display.html', result=graph_data, accounts=accounts)
+    return render_template(
+        'display.html',
+        result=graph_data,
+        accounts=accounts
+        )
 
 
 @app.route("/dashboard")
@@ -85,21 +88,20 @@ def dashboard():
     labels = ['Category A', 'Category B', 'Category C']
     values = [30, 50, 20]
 
-    # Create pie chart
     fig, ax = plt.subplots()
     ax.pie(values, labels=labels, autopct='%1.1f%%')
     ax.set_title('Sample Pie Chart')
 
-    # Save the chart image as bytes in memory
     chart_bytes = io.BytesIO()
     plt.savefig(chart_bytes, format='png')
     plt.close()
-
-    # Encode the chart image data to base64
     chart_base64 = base64.b64encode(chart_bytes.getvalue()).decode('utf-8')
 
-    # Render the template with the base64-encoded image data
-    return render_template('dashboard.html', chart_base64=chart_base64, user=user)
+    return render_template(
+        'dashboard.html',
+        chart_base64=chart_base64,
+        user=user
+        )
 
 
 @app.route('/update_piechart', methods=['POST'])
@@ -178,7 +180,7 @@ def _get_token_from_cache(scope=None):
         return result, accounts
 
 
-app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
+app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
 
 if __name__ == "__main__":
     app.run()
