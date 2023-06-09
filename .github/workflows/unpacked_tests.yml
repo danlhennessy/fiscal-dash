@@ -1,0 +1,24 @@
+name: Unpacked Tests
+
+on:
+  workflow_run:
+    workflows: ["Dependencies"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Lint with Flake8
+        run: flake8
+
+      - name: Lint with Pylint
+        run: pylint **/*.py
+
+      - name: Lint with Ruff
+        run: ruff **/*.py
