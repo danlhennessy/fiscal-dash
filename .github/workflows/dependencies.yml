@@ -27,7 +27,6 @@ jobs:
       run: safety check --file requirements/test.txt --full-report
       
     - name: Lint with Flake8
-      if: success()
       run: flake8 || exit 0
       continue-on-error: true
 
