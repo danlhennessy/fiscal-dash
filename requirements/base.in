@@ -1,0 +1,10 @@
+Flask
+Flask-Session
+matplotlib
+msal
+mysql-connector-python
+pip-compile-multi
+plotly
+requests
+safety
+Werkzeug
