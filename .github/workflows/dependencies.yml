@@ -24,7 +24,7 @@ jobs:
       run: pip install -r requirements/test.txt
     
     - name: Run safety on current dependencies
-      run: safety check --file requirements/test.txt --ful-report
+      run: safety check --file requirements/test.txt --full-report
     
     - name: Continue to Further Steps
       if: success()
