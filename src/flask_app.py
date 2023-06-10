@@ -132,15 +132,8 @@ def plotly():
         connection=database.FISCALDB
         )
 
-    # Create pie chart using selected values from the database
-    categories = [row[2] for row in result]
-    values = [row[3] for row in result]
-    fig = go.Figure(data=[go.Pie(labels=categories, values=values, hole=0.4)])
+    chart_html = create_pie_chart(result)
 
-    # Render the chart to an HTML string
-    chart_html = fig.to_html(full_html=False)
-
-    # Pass the chart HTML to the template
     return render_template('plotly.html', chart_html=chart_html)
 
 
@@ -176,6 +169,15 @@ def _get_token_from_cache(scope=None):
         result = cca.acquire_token_silent(scope, account=accounts[0])
         _save_cache(cache)
         return result, accounts
+    
+
+def create_pie_chart(data: list[tuple]) -> str:
+    """Create pie chart with data from database
+    and return chart as an HTML string"""
+    categories = [row[2] for row in data]
+    values = [row[3] for row in data]
+    fig = go.Figure(data=[go.Pie(labels=categories, values=values, hole=0.4)])
+    return fig.to_html(full_html=False)
 
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
