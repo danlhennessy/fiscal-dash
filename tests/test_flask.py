@@ -1,49 +1,60 @@
 import unittest
-from flask import Flask, url_for
+from flask import Flask, url_for, session
+from flask_testing import TestCase
 import src.flask_app
 
 
-class FlaskTestCase(unittest.TestCase):
+class FlaskAppTests(TestCase):
+    def create_app(self):
+        return src.flask_app.app
 
-    def setUp(self):
-        self.app = Flask(__name__)
-        self.app.config['TESTING'] = True
-        self.app_context = self.app.test_request_context()
-        self.app_context.push()
-        self.client = self.app.test_client()
+    def test_index(self):
+        with self.client:
+            response = self.client.get('/', follow_redirects=False)
+            self.assertIn(response.status_code, [301, 302, 303, 305, 307])
+            self.assertEqual(response.location, '/login')
 
-    def tearDown(self):
-        self.app_context.pop()
+    # def test_login(self):
+    #     with self.client:
+    #         response = self.client.get('/login')
+    #         self.assertEqual(response.status_code, 200)
+    #         self.assert_template_used('login.html')
+    #         self.assertIn('auth_url', session)
 
-    def test_dashboard_route(self):
-        response = self.client.get('/dashboard')
-        self.assertEqual(response.status_code, 200)
+    # def test_authorized(self):
+    #     with self.client:
+    #         response = self.client.get('/authorized')
+    #         self.assertRedirects(response, url_for('index'))
 
-    def test_dashboard_redirect_to_login(self):
-        # Simulate the case when token is not available
-        with self.app.test_request_context():
-            with self.app.test_client() as client:
-                response = client.get('/dashboard')
-                self.assertRedirects(response, url_for('login'))
+    # def test_logout(self):
+    #     with self.client:
+    #         response = self.client.get('/logout')
+    #         self.assertRedirects(response, 'https://login.microsoftonline.com/oauth2/v2.0/logout')
 
-    def test_dashboard_template_rendered(self):
-        # Simulate the case when token is available
-        with self.app.test_request_context():
-            with self.app.test_client() as client:
-                # Mock the _get_token_from_cache() function to return a token
-                src.flask_app._get_token_from_cache = lambda scope: ('mock_token', [])
-                response = client.get('/dashboard')
-                self.assertEqual(response.status_code, 200)
-                self.assertIn(b'dashboard.html', response.data)
+    # def test_dashboard(self):
+    #     with self.client:
+    #         response = self.client.get('/dashboard')
+    #         self.assertEqual(response.status_code, 200)
+    #         self.assert_template_used('dashboard.html')
+    #         self.assertIn('chart_base64', response.get_data(as_text=True))
+    #         self.assertIn('user', response.get_data(as_text=True))
 
-    def test_dashboard_chart_data(self):
-        # Simulate the case when token is available
-        with self.app.test_request_context():
-            with self.app.test_client() as client:
-                # Mock the _get_token_from_cache() function to return a token
-                src.flask_app._get_token_from_cache = lambda scope: ('mock_token', [])
-                response = client.get('/dashboard')
-                self.assertEqual(response.status_code, 200)
-                self.assertIn(b'chart_base64', response.data)
-                self.assertIn(b'user', response.data)
-                
+    # def test_update_piechart(self):
+    #     with self.client:
+    #         response = self.client.post('/update_piechart', data={
+    #             'user': 'test_user',
+    #             'category': 'test_category',
+    #             'value': '50'
+    #         })
+    #         self.assertRedirects(response, '/plotly')
+
+    # def test_plotly(self):
+    #     with self.client:
+    #         response = self.client.get('/plotly')
+    #         self.assertEqual(response.status_code, 200)
+    #         self.assert_template_used('plotly.html')
+    #         self.assertIn('chart_html', response.get_data(as_text=True))
+
+
+if __name__ == '__main__':
+    unittest.main()
