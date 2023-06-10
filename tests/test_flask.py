@@ -1,6 +1,6 @@
 import unittest
-from flask import Flask, url_for, session
 from flask_testing import TestCase
+from flask import Flask, url_for, session
 import src.flask_app
 
 
@@ -14,22 +14,19 @@ class FlaskAppTests(TestCase):
             self.assertIn(response.status_code, [301, 302, 303, 305, 307])
             self.assertEqual(response.location, '/login')
 
-    # def test_login(self):
-    #     with self.client:
-    #         response = self.client.get('/login')
-    #         self.assertEqual(response.status_code, 200)
-    #         self.assert_template_used('login.html')
-    #         self.assertIn('auth_url', session)
+    def test_login(self):
+        with self.client:
+            response = self.client.get('/login')
+            self.assertEqual(response.status_code, 200)
+            self.assert_template_used('login.html')
+            self.assertIn('auth_uri', session.get('flow'))
 
-    # def test_authorized(self):
-    #     with self.client:
-    #         response = self.client.get('/authorized')
-    #         self.assertRedirects(response, url_for('index'))
-
-    # def test_logout(self):
-    #     with self.client:
-    #         response = self.client.get('/logout')
-    #         self.assertRedirects(response, 'https://login.microsoftonline.com/oauth2/v2.0/logout')
+    def test_logout(self):
+        with self.client:
+            response = self.client.get('/logout')
+            expected_suffix = ("/oauth2/v2.0/logout?post_logout_redirect_uri="
+                               + url_for("index", _external=True))
+            assert response.location.endswith(expected_suffix)
 
     # def test_dashboard(self):
     #     with self.client:

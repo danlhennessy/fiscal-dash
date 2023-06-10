@@ -40,4 +40,4 @@ jobs:
         
     # Test locally for now
     # - name: Run pytest
-    #   run: pytest tests/unpacked/
+    #   run: pytest -sv tests/unpacked/
