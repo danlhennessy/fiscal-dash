@@ -1,5 +1,6 @@
 FROM python:3.10
 COPY src /app/src
+COPY run.py /app
 COPY requirements /app/requirements
 COPY tests /app/tests
 COPY logs /app/logs
@@ -11,4 +12,4 @@ RUN pip install -r requirements/base.txt
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["python", "run.py"]
