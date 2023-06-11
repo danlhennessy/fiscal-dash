@@ -3,12 +3,12 @@ COPY src /app/src
 COPY run.py /app
 COPY requirements /app/requirements
 COPY tests /app/tests
-COPY logs /app/logs
 WORKDIR /app
 
 ENV DOCKER_ENV true
 
 RUN pip install -r requirements/base.txt
+RUN mkdir -p /logs
 
 EXPOSE 5000
 
