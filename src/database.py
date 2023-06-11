@@ -2,7 +2,7 @@
 Retrieving, updating values"""
 import mysql.connector
 import os
-from src import app_config
+from src.vault_actions import FISCAL_VAULT
 
 
 class MySQLConnectionError(Exception):
