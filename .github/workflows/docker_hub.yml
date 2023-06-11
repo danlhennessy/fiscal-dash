@@ -25,5 +25,5 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
           echo $DOCKERHUB_USERNAME
-          docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest .
-          docker push $DOCKERHUB_USERNAME/fiscal-dash:latest
+          docker buildx build --platform linux/amd64 -t danlh/fiscal-dash:latest .
+          docker push danlh/fiscal-dash:latest
