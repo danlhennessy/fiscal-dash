@@ -1,6 +1,6 @@
 # This workflow will pull dependencies from cache, check for new requirements/requirements and push back into cache. Then run a safety check
 
-name: Unpackaged Tests
+name: 1. Unpackaged Tests
 
 on:
   push:

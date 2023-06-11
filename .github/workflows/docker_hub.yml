@@ -1,4 +1,4 @@
-name: Docker build Image and push to Hub
+name: 2. Docker build Image and push to Hub
 
 on:
   workflow_dispatch:
@@ -24,5 +24,6 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
+          echo $DOCKERHUB_USERNAME
           docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest .
           docker push $DOCKERHUB_USERNAME/fiscal-dash:latest
