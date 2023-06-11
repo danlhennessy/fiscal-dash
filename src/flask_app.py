@@ -1,6 +1,6 @@
 from src import app_config, database
 from flask import Flask, render_template, session, request, redirect, url_for
-from flask_session import Session  # https://pythonhosted.org/Flask-Session
+from flask_session import Session
 import requests
 import matplotlib.pyplot as plt
 import msal

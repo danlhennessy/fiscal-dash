@@ -1,6 +1,7 @@
 """Connects to Fiscal DB and provides functions for database utility:
 Retrieving, updating values"""
 import mysql.connector
+import os
 from src import app_config
 
 
@@ -14,8 +15,13 @@ class MySQLConnectionError(Exception):
         return f"MySQL Connection Error: {self.message}"
 
 
+if os.environ.get('DOCKER_ENV') == 'true':
+    database_host = 'host.docker.internal'
+else:
+    database_host = 'localhost'
+
 FISCALDB = mysql.connector.connect(
-    host='localhost',
+    host=database_host,
     user=app_config.DB_USER,
     password=app_config.DB_PASS,
     database=app_config.DB_NAME

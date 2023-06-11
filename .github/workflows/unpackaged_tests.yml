@@ -39,5 +39,5 @@ jobs:
       continue-on-error: true
         
     # Test locally for now
-    # - name: Run pytest
+    # - name: Run pytest with unpacked tests
     #   run: pytest -sv tests/unpacked/

@@ -1,11 +1,14 @@
 FROM python:3.10
-
+COPY src /app/src
+COPY requirements /app/requirements
+COPY tests /app/tests
+COPY logs /app/logs
 WORKDIR /app
 
-COPY requirements.txt app.py ./
+ENV DOCKER_ENV true
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements/base.txt
 
-EXPOSE 8501
+EXPOSE 5000
 
-CMD ["streamlit", "run", "app.py"]
+CMD ["python", "app.py"]
