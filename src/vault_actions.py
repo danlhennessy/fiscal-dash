@@ -10,19 +10,28 @@ class vault():
         print(f'Is client authenticated: {self.client.is_authenticated()}')
 
     def create_secret(self, path, secret: dict):
-        response = self.client.secrets.kv.v2.create_or_update_secret(path=path, secret=secret)
+        response = self.client.secrets.kv.v2.create_or_update_secret(
+            path=path,
+            secret=secret
+            )
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def display_secret(self, path):
-        response = self.client.secrets.kv.read_secret_version(path=path)
+        response = self.client.secrets.kv.read_secret_version(
+            path=path
+            )
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def get_secret(self, path, key):
-        response = self.client.secrets.kv.read_secret_version(path=path)
+        response = self.client.secrets.kv.read_secret_version(
+            path=path
+            )
         return response['data']['data'][key]
 
     def dict_all(self, path):
-        response = self.client.secrets.kv.v2.read_secret_version(path=path)
+        response = self.client.secrets.kv.v2.read_secret_version(
+            path=path
+            )
         data = response['data']['data']
         return dict(data)
 

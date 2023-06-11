@@ -4,6 +4,8 @@ import mysql.connector
 import os
 from src.vault_actions import FISCAL_VAULT
 
+fiscal_dict = FISCAL_VAULT.dict_all('secret')
+
 
 class MySQLConnectionError(Exception):
     """Custom exception for errors encountered during MySQL DB connection"""
@@ -22,9 +24,9 @@ else:
 
 FISCALDB = mysql.connector.connect(
     host=database_host,
-    user=app_config.DB_USER,
-    password=app_config.DB_PASS,
-    database=app_config.DB_NAME
+    user=fiscal_dict['DB_USER'],
+    password=fiscal_dict['DB_PASS'],
+    database=fiscal_dict['DB_NAME']
 )
 
 
