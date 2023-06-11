@@ -39,6 +39,9 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: docker run -d --name fiscal_container --memory=4g $DOCKERHUB_USERNAME/fiscal-dash:latest
 
+      - name: Wait for container to be ready
+        run: sleep 20
+
       - name: Run Tests
         run: docker exec fiscal_container pytest
 
