@@ -1,4 +1,3 @@
-from src import app_config
 import hvac
 import json
 import os
@@ -43,6 +42,7 @@ if os.environ.get('DOCKER_ENV') == 'true':
         token=os.environ.get('VAULT_TOKEN')
         )
 else:
+    from src import app_config
     FISCAL_VAULT = vault(
         url=app_config.VAULT_URL,
         namespace=app_config.VAULT_NAMESPACE,
