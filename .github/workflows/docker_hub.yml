@@ -23,5 +23,8 @@ jobs:
       - name: Build and push Docker image
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          VAULT_URL: ${{ secrets.VAULT_URL }}
+          VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
         run: |
-          docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest --push .
+          docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest --push --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .

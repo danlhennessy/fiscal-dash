@@ -1,5 +1,6 @@
 Flask
 Flask-Session
+hvac
 matplotlib
 msal
 mysql-connector-python
