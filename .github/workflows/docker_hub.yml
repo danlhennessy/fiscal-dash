@@ -37,7 +37,7 @@ jobs:
       - name: Run Docker container
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
+        run: docker run -d --name fiscal_container --memory=4g $DOCKERHUB_USERNAME/fiscal-dash:latest
 
       - name: Run Tests
         run: docker exec fiscal_container pytest
