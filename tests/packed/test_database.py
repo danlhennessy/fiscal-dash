@@ -1,14 +1,20 @@
 import unittest
 import mysql.connector
+import os
 from src.vault_actions import FISCAL_VAULT
 
 fiscal_dict = FISCAL_VAULT.dict_all('secret')
+
+if os.environ.get('DOCKER_ENV') == 'true':
+    database_host = 'host.docker.internal'
+else:
+    database_host = 'localhost'
 
 
 class TestDatabase(unittest.TestCase):
     def setUp(self):
         self.connection = mysql.connector.connect(
-            host='localhost',
+            host=database_host,
             user=fiscal_dict['DB_USER'],
             password=fiscal_dict['DB_PASS'],
             database=fiscal_dict['DB_NAME']
