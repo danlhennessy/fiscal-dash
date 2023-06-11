@@ -40,7 +40,7 @@ jobs:
         run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
 
       - name: Run Tests
-        run: docker exec fiscal_container pytest
+        run: docker exec -w /app fiscal_container pytest
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
