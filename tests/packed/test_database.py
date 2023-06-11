@@ -1,15 +1,17 @@
 import unittest
 import mysql.connector
-import tests.test_config as test_config
+from src.vault_actions import FISCAL_VAULT
+
+fiscal_dict = FISCAL_VAULT.dict_all('secret')
 
 
 class TestDatabase(unittest.TestCase):
     def setUp(self):
         self.connection = mysql.connector.connect(
             host='localhost',
-            user=test_config.DB_USER,
-            password=test_config.DB_PASS,
-            database=test_config.DB_NAME
+            user=fiscal_dict['DB_USER'],
+            password=fiscal_dict['DB_PASS'],
+            database=fiscal_dict['DB_NAME']
         )
         self.create_test_table()
 

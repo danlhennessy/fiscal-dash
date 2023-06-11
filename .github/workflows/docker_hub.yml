@@ -1,4 +1,4 @@
-name: 2. Docker build Image and push to Hub
+name: 2. Packed Tests
 
 on:
   workflow_dispatch:
@@ -28,3 +28,19 @@ jobs:
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
         run: |
           docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest --push --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
+
+      - name: Pull Docker image
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: docker pull $DOCKERHUB_USERNAME/fiscal-dash:latest
+
+      - name: Run Docker container
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
+
+      - name: Run Tests
+        run: docker exec fiscal_container pytest app/
+
+      - name: Stop and remove container
+        run: docker stop fiscal_container && docker rm fiscal_container
