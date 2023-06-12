@@ -17,8 +17,12 @@ def flask_run():
     flask_app.app.run()
 
 
+def pytest_run():
+    pytest.main(args=['tests/test_flask.py'])
+
+
 if __name__ == "__main__":
-    pytest_thread = Thread(target=pytest.main)
+    pytest_thread = Thread(target=pytest_run())
     pytest_thread.start()
 
     flask_run()
