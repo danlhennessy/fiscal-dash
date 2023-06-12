@@ -6,16 +6,18 @@ from src.vault_actions import FISCAL_VAULT
 fiscal_dict = FISCAL_VAULT.dict_all('secret')
 
 if os.environ.get('DOCKER_ENV') == 'true':
-    database_host = 'host.docker.internal'
+    database_host = fiscal_dict['AWS_DB_HOST']
+    database_user = fiscal_dict['AWS_DB_USER']
 else:
     database_host = 'localhost'
+    database_user = 'root'
 
 
 class TestDatabase(unittest.TestCase):
     def setUp(self):
         self.connection = mysql.connector.connect(
             host=database_host,
-            user=fiscal_dict['DB_USER'],
+            user=database_user,
             password=fiscal_dict['DB_PASS'],
             database=fiscal_dict['DB_NAME']
         )
