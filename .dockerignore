@@ -1,4 +1,4 @@
-
+tests/test_config.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -111,3 +111,7 @@ flask_session/7e8dd14ca461d0d36fba846acbd22ee5
 flask_session/08bfef601877895320c82f59926b87d1
 flask_session/8f1c2632473028da77ab93aba5eadcbe
 flask_session/2029240f6d1128be89ddc32729463129
+src/app_config.py
+tester.py
+report.html
+/assets

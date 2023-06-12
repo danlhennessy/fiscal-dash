@@ -3,4 +3,5 @@ flake8
 flask_testing
 pylint
 pytest
+pytest-html
 ruff

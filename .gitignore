@@ -115,3 +115,5 @@ flask_session/8f1c2632473028da77ab93aba5eadcbe
 flask_session/2029240f6d1128be89ddc32729463129
 src/app_config.py
 tester.py
+report.html
+/assets

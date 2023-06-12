@@ -40,13 +40,24 @@ jobs:
         run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
 
       - name: Wait for Pytest to run
-        run: sleep 360
+        run: sleep 180
 
-      - name: Store Container logs
-        run: docker logs fiscal_container > container_logs.txt 2>&1
-      
-      - name: Retrieve Container logs
-        run: cat -v container_logs.txt
+      - name: Retrieve Logs amd Pytest Report from Container
+        run: |
+          docker logs fiscal_container > container_logs.txt 2>&1
+          docker cp fiscal_container:report.html .
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
+      
+      - name: Archive Log File as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: container-logs
+          path: container_logs.txt
+
+      - name: Archive Test Report as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: report.html
