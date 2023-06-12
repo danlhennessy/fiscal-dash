@@ -46,7 +46,7 @@ jobs:
         run: docker logs fiscal_container > container_logs.txt 2>&1
       
       - name: Retrieve Container logs
-        run: cat container_logs.txt
+        run: cat -v container_logs.txt
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
