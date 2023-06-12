@@ -18,7 +18,7 @@ def flask_run():
 
 
 def pytest_run():
-    pytest.main(args='--html=report.html')
+    pytest.main(args=['--html=report.html'])
 
 
 if __name__ == "__main__":

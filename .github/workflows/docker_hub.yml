@@ -45,7 +45,7 @@ jobs:
       - name: Retrieve Logs amd Pytest Report from Container
         run: |
           docker logs fiscal_container > container_logs.txt 2>&1
-          docker cp fiscal_container:report.html .
+          docker cp fiscal_container:/app/report.html .
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
