@@ -3,5 +3,5 @@ flake8
 flask_testing
 pylint
 pytest
-pytest-html
+pytest-html==4.0.0rc0
 ruff
