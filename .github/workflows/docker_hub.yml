@@ -37,7 +37,16 @@ jobs:
       - name: Run Docker container
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: docker run --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
+        run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
+
+      - name: Wait for Pytest to run
+        run: sleep 30
+
+      - name: Store Container logs
+        run: docker logs fiscal_container > container_logs.txt 2>&1
+      
+      - name: Retrieve Container logs
+        run: cat container_logs.txt
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container

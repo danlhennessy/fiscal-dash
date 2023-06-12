@@ -14,20 +14,13 @@ def flask_run():
     # log_level = logging.DEBUG if debug_mode else logging.INFO
     # logging.basicConfig(filename=log_file, level=log_level)
 
-    flask_app.app.run(host='0.0.0.0')
-
-
-def run_pytest():
-    pytest.main()
+    flask_app.app.run()
 
 
 if __name__ == "__main__":
-    # flask_thread = Thread(target=flask_run)
-    # flask_thread.start()
+    pytest_thread = Thread(target=pytest.main)
+    pytest_thread.start()
 
-    # pytest_thread = Thread(target=run_pytest)
-    # pytest_thread.start()
-
-    # pytest_thread.join()
-    
     flask_run()
+
+    pytest_thread.join()
