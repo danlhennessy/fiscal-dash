@@ -5,6 +5,8 @@ from threading import Thread
 
 
 def flask_run():
+    database.check_mysql_connection(database.FISCALDB)
+
     debug_mode = False
     flask_app.app.debug = debug_mode
 
@@ -15,13 +17,17 @@ def flask_run():
     flask_app.app.run(host='0.0.0.0')
 
 
-if __name__ == "__main__":
-
-    database.check_mysql_connection(database.FISCALDB)
-
-    flask_thread = Thread(target=flask_run)
-    flask_thread.start()
-
+def run_pytest():
     pytest.main()
 
-    flask_thread.join()
+
+if __name__ == "__main__":
+    # flask_thread = Thread(target=flask_run)
+    # flask_thread.start()
+
+    # pytest_thread = Thread(target=run_pytest)
+    # pytest_thread.start()
+
+    # pytest_thread.join()
+    
+    flask_run()
