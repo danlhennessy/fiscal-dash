@@ -18,7 +18,7 @@ def flask_run():
 
 
 def pytest_run():
-    pytest.main(args=['tests/test_flask.py'])
+    pytest.main()
 
 
 if __name__ == "__main__":
