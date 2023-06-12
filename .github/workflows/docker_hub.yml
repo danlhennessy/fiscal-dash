@@ -40,7 +40,7 @@ jobs:
         run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
 
       - name: Wait for Pytest to run
-        run: sleep 30
+        run: sleep 120
 
       - name: Store Container logs
         run: docker logs fiscal_container > container_logs.txt 2>&1
