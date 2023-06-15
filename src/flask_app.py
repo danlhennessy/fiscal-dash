@@ -1,4 +1,4 @@
-from src import database
+from src import database, rest_api
 from src.vault_actions import FISCAL_VAULT
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session
@@ -134,6 +134,17 @@ def plotly():
     chart_html = create_pie_chart(result)
 
     return render_template('plotly.html', chart_html=chart_html)
+
+
+# # REST API routes # #
+
+app.route('/api/all', methods=['GET'])(rest_api.get_all)
+
+app.route('/api/users', methods=['GET'])(rest_api.get_users)
+
+app.route('/api/key/<key>', methods=['GET'])(rest_api.get_key)
+
+# #                 # #
 
 
 def _load_cache():

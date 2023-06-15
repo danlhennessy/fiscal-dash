@@ -1,7 +1,7 @@
 """Connects to Fiscal DB and provides functions for database utility:
 Retrieving, updating values"""
-import mysql.connector
 import os
+import mysql.connector
 from src.vault_actions import FISCAL_VAULT
 
 fiscal_dict = FISCAL_VAULT.dict_all('secret')
@@ -47,8 +47,13 @@ def retrieve_database(table: str,
     """Gets database table values from provided keys"""
     cursor = connection.cursor()
     query = f"SELECT {', '.join(keys)} FROM {table}"
-    cursor.execute(query)
-    return cursor.fetchall()
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    except mysql.connector.errors.ProgrammingError as error:
+        result = ("Error retrieving key from MySQL database:", str(error))
+    return result
 
 
 def update_database(table: str,
