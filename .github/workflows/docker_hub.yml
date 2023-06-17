@@ -42,7 +42,7 @@ jobs:
       - name: Wait for Pytest to run
         run: sleep 60
 
-      - name: Retrieve Logs amd Pytest Report from Container
+      - name: Retrieve Logs and Pytest Report from Container
         run: |
           docker logs fiscal_container > container_logs.txt 2>&1
           docker cp fiscal_container:/app/report.html .
