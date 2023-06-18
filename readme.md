@@ -35,7 +35,7 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
         <td>CD</td>
         <td><img width="48" src="https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg"></td>
         <td><a href="https://argoproj.github.io/cd">ArgoCD</a></td>
-        <td>Continuous Delivery - deploy app manifests to Kubernetes</td>
+        <td>Continuous Deployment - Synchronise app manifests with Kubernetes</td>
     </tr>
     <tr>
         <td>Secrets Management</td>
