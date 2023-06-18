@@ -1,4 +1,4 @@
 kubectl apply -f deployment.yml
 kubectl apply -f service.yml
 
-kubectl port-forward fiscal-service 5001:5000
+Access app externally at nodeIP:nodeport , or internally at clusterIP:port
