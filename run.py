@@ -19,13 +19,13 @@ def flask_run():
 
 
 def pytest_run():
-    pytest.main(args=['--html=report.html'])
+    pytest.main(args=['--html=logs/report.html'])
 
 
 if __name__ == "__main__":
-    # pytest_thread = Thread(target=pytest_run())
-    # pytest_thread.start()
+    pytest_thread = Thread(target=pytest_run())
+    pytest_thread.start()
 
     flask_run()
 
-    # pytest_thread.join()
+    pytest_thread.join()

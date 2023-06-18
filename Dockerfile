@@ -3,6 +3,7 @@ COPY src /app/src
 COPY run.py /app
 COPY requirements /app/requirements
 COPY tests /app/tests
+RUN mkdir -p app/logs
 WORKDIR /app
 
 ARG VAULT_URL
@@ -15,7 +16,6 @@ ENV VAULT_TOKEN=$VAULT_TOKEN
 ENV DOCKER_ENV true
 
 RUN pip install -r requirements/test.txt
-RUN mkdir -p /logs
 
 EXPOSE 5000
 

@@ -42,23 +42,20 @@ jobs:
       - name: Wait for Pytest to run
         run: sleep 60
 
+      - name: Create 'mylogs' directory
+        run: mkdir mylogs
+
       - name: Retrieve Logs and Pytest Report from Container
         run: |
-          docker logs fiscal_container > container_logs.txt 2>&1
-        # docker exec fiscal_container sh -c 'test -f /app/report.html && docker cp fiscal_container:/app/report.html .'
+          docker logs fiscal_container > mylogs/container_logs.txt 2>&1
+          docker cp fiscal_container:/app/logs mylogs/app_logs'
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
       
-      - name: Archive Log File as Artifact
+      - name: Archive Logs Directory as Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: container-logs
-          path: container_logs.txt
+          name: logs
+          path: /mylogs
 
-      - name: Archive Test Report as Artifact
-        if: ${{ steps.check_file_status.outputs.file_exists == 'true' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-report
-          path: report.html
