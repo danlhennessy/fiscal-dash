@@ -26,8 +26,14 @@ jobs:
     - name: Run safety on current dependencies
       run: safety check --file requirements/test.txt --full-report
 
-    - name: Run CodeQL Analysis
-      uses: github/codeql-action@latest
+    - name: Run DevSkim Analysis
+      uses: microsoft/devskim-action@v1
+      with:
+        directory-to-scan: src
+        should-scan-archives: false
+        output-filename: devskim-results.sarif
+        output-directory: security/results (appended to $GITHUB_WORKSPACE)
+        ignore-globs: "**/.git/**,*.txt"
       
     - name: Lint with Flake8
       run: flake8 || exit 0
