@@ -117,3 +117,4 @@ src/app_config.py
 tester.py
 report.html
 /assets
+kubernetes/monitoring/setup.md

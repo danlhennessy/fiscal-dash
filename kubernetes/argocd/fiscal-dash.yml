@@ -8,7 +8,7 @@ spec:
     namespace: fiscal-ns
     server: 'https://kubernetes.default.svc'
   source:
-    path: Kubernetes
+    path: kubernetes
     repoURL: 'https://github.com/danlhennessy/fiscal-dash'
     targetRevision: HEAD
   sources: []
