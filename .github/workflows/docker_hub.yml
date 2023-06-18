@@ -45,7 +45,7 @@ jobs:
       - name: Create 'mylogs' directory
         run: mkdir mylogs
 
-      - name: Retrieve Logs and Pytest Report from Container
+      - name: Retrieve App and Container Logs
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
           docker cp fiscal_container:/app/logs mylogs/app_logs
