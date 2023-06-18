@@ -25,6 +25,9 @@ jobs:
     
     - name: Run safety on current dependencies
       run: safety check --file requirements/test.txt --full-report
+
+    - name: Run SAST (Static Application Security Testing)
+      uses: securecodebox/sast-scan-action@v1
       
     - name: Lint with Flake8
       run: flake8 || exit 0
