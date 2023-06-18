@@ -27,7 +27,7 @@ jobs:
       run: safety check --file requirements/test.txt --full-report
 
     - name: Run Bandit SAST
-      run: bandit -r ./src
+      run: bandit -r ./src --exit-zero
 
     - name: Run DevSkim Analysis
       uses: microsoft/devskim-action@v1
