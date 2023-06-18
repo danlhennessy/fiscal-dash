@@ -12,6 +12,7 @@ from opentelemetry.sdk.trace.export import (
     ConsoleSpanExporter,
 )
 from opentelemetry.trace import get_tracer_provider, set_tracer_provider
+from prometheus_flask_exporter import PrometheusMetrics
 import plotly.graph_objects as go
 import io
 import base64
@@ -208,6 +209,8 @@ get_tracer_provider().add_span_processor(
 instrumentor = FlaskInstrumentor()
 
 instrumentor.instrument_app(app)
+
+metrics = PrometheusMetrics(app)
 
 if __name__ == "__main__":
     app.run()
