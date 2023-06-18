@@ -23,9 +23,9 @@ def pytest_run():
 
 
 if __name__ == "__main__":
-    pytest_thread = Thread(target=pytest_run())
-    pytest_thread.start()
+    # pytest_thread = Thread(target=pytest_run())
+    # pytest_thread.start()
 
     flask_run()
 
-    pytest_thread.join()
+    # pytest_thread.join()

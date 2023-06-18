@@ -2,6 +2,8 @@
 bandit
 flake8
 flask_testing
+opentelemetry-distro
+opentelemetry-instrumentation-flask
 pylint
 pytest
 pytest-html==4.0.0rc0

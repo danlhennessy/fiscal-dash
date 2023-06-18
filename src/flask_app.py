@@ -5,6 +5,13 @@ from flask_session import Session
 import requests
 import matplotlib.pyplot as plt
 import msal
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    ConsoleSpanExporter,
+)
+from opentelemetry.trace import get_tracer_provider, set_tracer_provider
 import plotly.graph_objects as go
 import io
 import base64
@@ -191,6 +198,16 @@ def create_pie_chart(data: list[tuple]) -> str:
 
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
+
+
+set_tracer_provider(TracerProvider())
+get_tracer_provider().add_span_processor(
+    BatchSpanProcessor(ConsoleSpanExporter())
+)
+
+instrumentor = FlaskInstrumentor()
+
+instrumentor.instrument_app(app)
 
 if __name__ == "__main__":
     app.run()
