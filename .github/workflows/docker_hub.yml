@@ -40,7 +40,7 @@ jobs:
         run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
 
       - name: Wait for Pytest to run
-        run: sleep 60
+        run: sleep 30
 
       - name: Create 'mylogs' directory
         run: mkdir mylogs
@@ -48,7 +48,7 @@ jobs:
       - name: Retrieve Logs and Pytest Report from Container
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
-          docker cp fiscal_container:/app/logs mylogs/app_logs'
+          docker cp fiscal_container:/app/logs mylogs/app_logs
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
@@ -57,5 +57,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: logs
-          path: /mylogs
-
+          path: mylogs
