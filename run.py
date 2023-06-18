@@ -14,7 +14,7 @@ def flask_run():
     # log_level = logging.DEBUG if debug_mode else logging.INFO
     # logging.basicConfig(filename=log_file, level=log_level)
 
-    flask_app.app.run()
+    flask_app.app.run(host="0.0.0.0", port=5000)
 
 
 def pytest_run():
