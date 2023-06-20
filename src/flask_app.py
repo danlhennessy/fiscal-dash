@@ -135,7 +135,6 @@ def plotly():
 
     result = database.retrieve_database(
         table="pie_data",
-        keys=["id", "user", "category", "value"],
         connection=database.FISCALDB
         )
 

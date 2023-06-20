@@ -16,11 +16,10 @@ class TestRetrieveDatabase(TestDatabase):
 
         result = retrieve_database(
             "test_table",
-            ["id", "name"],
             self.connection
             )
 
-        expected_result = [(1, 'John'), (2, 'Jane')]
+        expected_result = [(1, 'John', 25), (2, 'Jane'), 30]
         self.assertEqual(result, expected_result)
 
 

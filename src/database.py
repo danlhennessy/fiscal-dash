@@ -42,17 +42,16 @@ def check_mysql_connection(connection):
 
 
 def retrieve_database(table: str,
-                      keys: list[str],
                       connection: mysql.connector.MySQLConnection):
-    """Gets database table values from provided keys"""
+    """Gets database table values"""
     cursor = connection.cursor()
-    query = f"SELECT {', '.join(keys)} FROM {table}"
+    query = f'SELECT * FROM {table}'
 
     try:
         cursor.execute(query)
         result = cursor.fetchall()
     except mysql.connector.errors.ProgrammingError as error:
-        result = ("Error retrieving key from MySQL database:", str(error))
+        result = ("Error retrieving data from MySQL database:", str(error))
     return result
 
 
