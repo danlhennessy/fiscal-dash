@@ -3,6 +3,7 @@ from src.vault_actions import FISCAL_VAULT
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session
 import requests
+from requests.exceptions import Timeout
 import matplotlib.pyplot as plt
 import msal
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
@@ -75,10 +76,14 @@ def graphcall():
     token, accounts = _get_token_from_cache(fiscal_dict['SCOPE'])
     if not token:
         return redirect(url_for("login"))
-    graph_data = requests.get(  # Use token to call downstream service
-        fiscal_dict['ENDPOINT'],
-        headers={'Authorization': 'Bearer ' + token['access_token']},
-        ).json()
+    try:
+        graph_data = requests.get(  # Use token to call downstream service
+            fiscal_dict['ENDPOINT'],
+            headers={'Authorization': 'Bearer ' + token['access_token']},
+            timeout=5
+                ).json()
+    except Timeout:
+        return "Request timed out!"
     return render_template(
         'display.html',
         result=graph_data,
