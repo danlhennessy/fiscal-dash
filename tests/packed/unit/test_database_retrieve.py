@@ -14,12 +14,9 @@ class TestRetrieveDatabase(TestDatabase):
             )
         self.connection.commit()
 
-        result = retrieve_database(
-            "test_table",
-            self.connection
-            )
+        result = retrieve_database(self.connection)
 
-        expected_result = [(1, 'John', 25), (2, 'Jane'), 30]
+        expected_result = [(1, 'John', 25), (2, 'Jane', 30)]
         self.assertEqual(result, expected_result)
 
 

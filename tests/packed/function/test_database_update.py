@@ -1,6 +1,6 @@
 import unittest
 from tests.packed.test_database import TestDatabase
-from src.database import retrieve_database, update_database
+from src.database import update_database, retrieve_database
 
 
 class TestUpdateDatabase(TestDatabase):

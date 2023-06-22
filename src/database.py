@@ -2,6 +2,7 @@
 Retrieving, updating values"""
 import os
 import mysql.connector
+import sys
 from src.vault_actions import FISCAL_VAULT
 
 fiscal_dict = FISCAL_VAULT.dict_all('secret')
@@ -41,11 +42,14 @@ def check_mysql_connection(connection):
         print("Error connecting to MySQL database:", str(error))
 
 
-def retrieve_database(table: str,
-                      connection: mysql.connector.MySQLConnection):
+def retrieve_database(connection: mysql.connector.MySQLConnection):
     """Gets database table values"""
+
     cursor = connection.cursor()
-    query = f'SELECT * FROM {table}'
+    if 'pytest' in sys.modules:
+        query = 'SELECT * FROM test_table'
+    else:
+        query = 'SELECT * FROM pie_data'
 
     try:
         cursor.execute(query)

@@ -9,8 +9,8 @@ if os.environ.get('DOCKER_ENV') == 'true':
     database_host = fiscal_dict['AWS_DB_HOST']
     database_user = fiscal_dict['AWS_DB_USER']
 else:
-    database_host = 'localhost'
-    database_user = 'root'
+    database_host = fiscal_dict['AWS_DB_HOST']
+    database_user = fiscal_dict['AWS_DB_USER']
 
 
 class TestDatabase(unittest.TestCase):

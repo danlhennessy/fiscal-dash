@@ -118,3 +118,4 @@ tester*.py
 report.html
 /assets
 kubernetes/monitoring/setup.md
+logs/assets/style.css
