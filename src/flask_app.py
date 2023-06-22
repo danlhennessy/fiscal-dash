@@ -118,7 +118,6 @@ def update_piechart():
     value = int(request.form.get('value'))
 
     database.update_database(
-        table="pie_data",
         keys=["user", "category", "value"],
         values=[user, category, value],
         connection=database.FISCALDB
@@ -133,10 +132,7 @@ def plotly():
     if not token:
         return redirect(url_for("login"))
 
-    result = database.retrieve_database(
-        table="pie_data",
-        connection=database.FISCALDB
-        )
+    result = database.retrieve_database(connection=database.FISCALDB)
 
     chart_html = create_pie_chart(result)
 
@@ -199,17 +195,20 @@ def create_pie_chart(data: list[tuple]) -> str:
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
 
+# Tracing #
 
-set_tracer_provider(TracerProvider())
-get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(ConsoleSpanExporter())
-)
+# set_tracer_provider(TracerProvider())
+# get_tracer_provider().add_span_processor(
+#     BatchSpanProcessor(ConsoleSpanExporter())
+# )
 
-instrumentor = FlaskInstrumentor()
+# instrumentor = FlaskInstrumentor()
 
-instrumentor.instrument_app(app)
+# instrumentor.instrument_app(app)
 
-metrics = PrometheusMetrics(app)
+# metrics = PrometheusMetrics(app)
+
+#         #
 
 if __name__ == "__main__":
     app.run()

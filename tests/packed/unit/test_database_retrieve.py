@@ -1,6 +1,21 @@
+import mysql.connector
 import unittest
 from tests.packed.test_database import TestDatabase
-from src.database import retrieve_database
+
+
+def retrieve_database(connection: mysql.connector.MySQLConnection):
+    """Gets database table values"""
+
+    cursor = connection.cursor()
+
+    query = 'SELECT * FROM test_table'
+
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    except mysql.connector.errors.ProgrammingError as error:
+        result = ("Error retrieving data from MySQL database:", str(error))
+    return result
 
 
 class TestRetrieveDatabase(TestDatabase):

@@ -46,10 +46,8 @@ def retrieve_database(connection: mysql.connector.MySQLConnection):
     """Gets database table values"""
 
     cursor = connection.cursor()
-    if 'pytest' in sys.modules:
-        query = 'SELECT * FROM test_table'
-    else:
-        query = 'SELECT * FROM pie_data'
+
+    query = 'SELECT * FROM pie_data'
 
     try:
         cursor.execute(query)
@@ -59,15 +57,19 @@ def retrieve_database(connection: mysql.connector.MySQLConnection):
     return result
 
 
-def update_database(table: str,
-                    keys: list[str],
+def update_database(keys: list,
                     values: list,
                     connection: mysql.connector.MySQLConnection):
     """Updates database table with provided key/values"""
     try:
         cursor = connection.cursor()
+
         placeholders = ','.join(['%s'] * len(keys))
-        query = f"INSERT INTO {table} ({','.join(keys)}) VALUES ({placeholders})"
+        escaped_keys = [connection._cmysql.escape_string(key) for key in keys]
+        clean_keys = [key.decode('utf-8') for key in escaped_keys]
+
+        query = f"INSERT INTO pie_data ({','.join(clean_keys)}) VALUES ({placeholders})"
+
         cursor.execute(query, values)
         connection.commit()
         cursor.close()
