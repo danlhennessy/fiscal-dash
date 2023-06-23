@@ -8,15 +8,18 @@ fiscal_dict = FISCAL_VAULT.dict_all('secret')
 if os.environ.get('DOCKER_ENV') == 'true':
     database_host = fiscal_dict['AWS_DB_HOST']
     database_user = fiscal_dict['AWS_DB_USER']
+    database_port = '3306'
 else:
     database_host = fiscal_dict['AWS_DB_HOST']
     database_user = fiscal_dict['AWS_DB_USER']
+    database_port = '30007'
 
 
 class TestDatabase(unittest.TestCase):
     def setUp(self):
         self.connection = mysql.connector.connect(
             host=database_host,
+            port=database_port,
             user=database_user,
             password=fiscal_dict['DB_PASS'],
             database=fiscal_dict['DB_NAME']

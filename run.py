@@ -5,8 +5,8 @@ from threading import Thread, local
 
 
 def flask_run():
-    if getattr(local_data, 'PYTEST_THREAD', True):
-        print('main thread')
+    # if getattr(local_data, 'PYTEST_THREAD', True):
+    #     print('main thread')
     database.check_mysql_connection(database.FISCALDB)
 
     debug_mode = False
@@ -21,17 +21,17 @@ def flask_run():
 
 
 def pytest_run():
-    if getattr(local_data, 'PYTEST_THREAD', True):
-        print('pytest thread')
+    # if getattr(local_data, 'PYTEST_THREAD', True):
+    #     print('pytest thread')
     pytest.main(args=['--html=logs/report.html'])
 
 
 if __name__ == "__main__":
-    local_data = local()
-    local_data.PYTEST_THREAD = True
-    pytest_thread = Thread(target=pytest_run())
-    pytest_thread.start()
+    # local_data = local()
+    # local_data.PYTEST_THREAD = True
+    # pytest_thread = Thread(target=pytest_run())
+    # pytest_thread.start()
 
     flask_run()
 
-    pytest_thread.join()
+    # pytest_thread.join()
