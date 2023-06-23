@@ -71,9 +71,9 @@ opentelemetry-util-http==0.39b0
     #   opentelemetry-instrumentation-wsgi
 pbr==5.11.1
     # via stevedore
-platformdirs==3.6.0
+platformdirs==3.8.0
     # via pylint
-pluggy==1.0.0
+pluggy==1.2.0
     # via pytest
 pycodestyle==2.10.0
     # via flake8
@@ -83,7 +83,7 @@ pygments==2.15.1
     # via rich
 pylint==2.17.4
     # via -r requirements/test.in
-pytest==7.3.2
+pytest==7.4.0
     # via
     #   -r requirements/test.in
     #   pytest-html
@@ -96,7 +96,7 @@ pyyaml==6.0
     # via bandit
 rich==13.4.2
     # via bandit
-ruff==0.0.272
+ruff==0.0.275
     # via -r requirements/test.in
 smmap==5.0.0
     # via gitdb

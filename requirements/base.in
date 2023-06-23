@@ -6,6 +6,7 @@ msal
 mysql-connector-python
 pip-compile-multi
 plotly
+prometheus-flask-exporter
 requests
 safety
 Werkzeug
