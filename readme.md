@@ -70,8 +70,8 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
     <tr>
         <td>Logging</td>
         <td><img width="48" src="https://seeklogo.com/images/E/elasticsearch-logo-C75C4578EC-seeklogo.com.png"></td>
-        <td><a href="https://www.elastic.co/">Elasticsearch</a></td>
-        <td>Log management and delivery with Elasticsearch, Filebeat and Logstash</td>
+        <td><a href="https://www.elastic.co/guide/en/cloud-on-k8s/2.8/k8s-quickstart.html">ECK</a></td>
+        <td>Log management and delivery with Elastic Cloud on Kubernetes. Beats -> ElasticSearch -> Kibana</td>
     </tr>
     <tr>
         <td>Instrumentation</td>
