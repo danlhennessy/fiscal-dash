@@ -200,7 +200,7 @@ def create_pie_chart(data: list[tuple]) -> str:
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
 
-# Tracing #
+# Tracing + Metrics #
 
 set_tracer_provider(TracerProvider())
 get_tracer_provider().add_span_processor(
@@ -213,7 +213,7 @@ instrumentor.instrument_app(app)
 
 metrics = PrometheusMetrics(app)
 
-#         #
+#                  #
 
 if __name__ == "__main__":
     app.run()
