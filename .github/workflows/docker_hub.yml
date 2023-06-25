@@ -48,7 +48,6 @@ jobs:
       - name: Retrieve App and Container Logs
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
-          docker cp fiscal_container:/data/logs mylogs/app_logs
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container

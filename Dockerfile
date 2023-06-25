@@ -3,7 +3,6 @@ COPY src /app/src
 COPY run.py /app
 COPY requirements /app/requirements
 COPY tests /app/tests
-RUN mkdir -p /data/logs
 WORKDIR /app
 
 ARG VAULT_URL
