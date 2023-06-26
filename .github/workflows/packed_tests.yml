@@ -27,12 +27,9 @@ jobs:
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
         run: |
-          docker buildx build --platform linux/amd64 -t $DOCKERHUB_USERNAME/fiscal-dash:latest --push --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
-
-      - name: Pull Docker image
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: docker pull $DOCKERHUB_USERNAME/fiscal-dash:latest
+          VERSION=$(date +"%Y%m%d%H%M%S")
+          IMAGE_TAG=$DOCKERHUB_USERNAME/fiscal-dash:$VERSION
+          docker buildx build --platform linux/amd64 -t $IMAGE_TAG --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
 
       - name: Run Docker container
         env:
@@ -48,6 +45,11 @@ jobs:
       - name: Retrieve App and Container Logs
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
+
+      - name: Run Docker container
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: docker push $IMAGE_TAG
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
