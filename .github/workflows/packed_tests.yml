@@ -26,12 +26,7 @@ jobs:
           VAULT_URL: ${{ secrets.VAULT_URL }}
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-        run: |
-          VERSION=$(date +"%Y%m%d%H%M%S")
-          IMAGE_TAG=danlh/fiscal-dash:$VERSION
-          echo "::set-output name=IMAGE_TAG::$IMAGE_TAG"
-          docker buildx build --platform linux/amd64 -t $IMAGE_TAG --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
-          docker run -d --name fiscal_container $IMAGE_TAG
+        run: docker compose up -d
 
       - name: Wait for Pytest to run
         run: sleep 30
@@ -44,7 +39,7 @@ jobs:
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
 
       - name: Push working image to Docker Hub
-        run: docker push ${{ steps.build.outputs.IMAGE_TAG }}
+        run: docker push $IMAGE_NAME
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container

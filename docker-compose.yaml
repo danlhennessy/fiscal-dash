@@ -1,0 +1,14 @@
+version: '3'
+services:
+  fiscal_container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VAULT_URL=${VAULT_URL}
+        - VAULT_NAMESPACE=${VAULT_NAMESPACE}
+        - VAULT_TOKEN=${VAULT_TOKEN}
+    container_name: fiscal_container
+    image: danlh/fiscal-dash:{{.StartDate.Format "200601021504"}}
+    environment:
+      - IMAGE_NAME=${DOCKERHUB_USERNAME}/fiscal-dash:{{.StartDate.Format "200601021504"}}
