@@ -35,8 +35,8 @@ jobs:
           echo $DATE
           docker compose up -d --build
 
-      - name: Wait for Pytest to run
-        run: sleep 30
+      - name: Run Pytest with running container
+        run: docker exec fiscal_container pytest
 
       - name: Create 'mylogs' directory
         run: mkdir mylogs
@@ -49,9 +49,6 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DATE: ${{ env.DATE }}
         run: docker push $DOCKERHUB_USERNAME/fiscal-dash:$DATE
-
-      - name: Stop and remove container
-        run: docker stop fiscal_container && docker rm fiscal_container
       
       - name: Archive Logs Directory as Artifact
         uses: actions/upload-artifact@v3
