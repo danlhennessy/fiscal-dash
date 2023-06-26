@@ -20,7 +20,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build Docker image
+        id: build
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           VAULT_URL: ${{ secrets.VAULT_URL }}
@@ -29,14 +30,15 @@ jobs:
         run: |
           VERSION=$(date +"%Y%m%d%H%M%S")
           IMAGE_TAG=$DOCKERHUB_USERNAME/fiscal-dash:$VERSION
+          echo "::set-output name=IMAGE_TAG::$IMAGE_TAG"
           docker buildx build --platform linux/amd64 -t $IMAGE_TAG --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
 
       - name: Run Docker container
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          echo $IMAGE_TAG
-          docker run -d --name fiscal_container $IMAGE_TAG
+          echo ${{ steps.build.outputs.IMAGE_TAG }}
+          docker run -d --name fiscal_container ${{ steps.build.outputs.IMAGE_TAG }}
 
       - name: Wait for Pytest to run
         run: sleep 30
@@ -51,7 +53,7 @@ jobs:
       - name: Push working image to Docker Hub
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: docker push $IMAGE_TAG
+        run: docker push ${{ steps.build.outputs.IMAGE_TAG }}
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
