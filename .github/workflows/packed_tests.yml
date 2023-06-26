@@ -46,7 +46,9 @@ jobs:
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
 
       - name: Push working image to Docker Hub
-        run: docker push $IMAGE_NAME
+        env:
+          DATE: ${{ env.DATE }}
+        run: docker push danlh/fiscal-dash:$DATE
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
