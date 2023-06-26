@@ -35,14 +35,20 @@ jobs:
           echo $DATE
           docker compose up -d --build
 
-      - name: Run Pytest with running container
-        run: docker exec fiscal_container pytest
-
       - name: Create 'mylogs' directory
         run: mkdir mylogs
-
+  
       - name: Retrieve App and Container Logs
         run: docker logs fiscal_container > mylogs/container_logs.txt 2>&1
+
+      - name: Archive Logs Directory as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: mylogs
+
+      - name: Run Pytest with running container
+        run: docker exec fiscal_container pytest
 
       - name: Push tested image to Docker Hub
         env:
@@ -50,8 +56,4 @@ jobs:
           DATE: ${{ env.DATE }}
         run: docker push $DOCKERHUB_USERNAME/fiscal-dash:$DATE
       
-      - name: Archive Logs Directory as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: logs
-          path: mylogs
+      
