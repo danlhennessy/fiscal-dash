@@ -34,7 +34,9 @@ jobs:
       - name: Run Docker container
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        run: docker run -d --name fiscal_container $DOCKERHUB_USERNAME/fiscal-dash:latest
+        run: |
+          echo $IMAGE_TAG
+          docker run -d --name fiscal_container $IMAGE_TAG
 
       - name: Wait for Pytest to run
         run: sleep 30
@@ -46,7 +48,7 @@ jobs:
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
 
-      - name: Run Docker container
+      - name: Push working image to Docker Hub
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: docker push $IMAGE_TAG
