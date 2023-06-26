@@ -23,7 +23,7 @@ jobs:
       - name: Set Date Variable
         run: echo "DATE=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_ENV"
 
-      - name: Build Docker image
+      - name: Build and run Docker image
         id: build
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -42,13 +42,13 @@ jobs:
         run: mkdir mylogs
 
       - name: Retrieve App and Container Logs
-        run: |
-          docker logs fiscal_container > mylogs/container_logs.txt 2>&1
+        run: docker logs fiscal_container > mylogs/container_logs.txt 2>&1
 
-      - name: Push working image to Docker Hub
+      - name: Push tested image to Docker Hub
         env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DATE: ${{ env.DATE }}
-        run: docker push danlh/fiscal-dash:$DATE
+        run: docker push $DOCKERHUB_USERNAME:/fiscal-dash:$DATE
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container

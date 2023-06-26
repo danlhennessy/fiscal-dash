@@ -202,18 +202,21 @@ app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)
 
 # Tracing + Metrics #
 
-set_tracer_provider(TracerProvider())
-get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(ConsoleSpanExporter())
-)
 
-instrumentor = FlaskInstrumentor()
+def instrument_application():
+    set_tracer_provider(TracerProvider())
+    get_tracer_provider().add_span_processor(
+        BatchSpanProcessor(ConsoleSpanExporter())
+    )
 
-instrumentor.instrument_app(app)
+    instrumentor = FlaskInstrumentor()
 
-metrics = PrometheusMetrics(app)
+    instrumentor.instrument_app(app)
 
-#                  #
+
+def export_metrics():
+    return PrometheusMetrics(app)
+
 
 if __name__ == "__main__":
     app.run()

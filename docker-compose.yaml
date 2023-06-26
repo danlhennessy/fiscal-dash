@@ -9,6 +9,6 @@ services:
         - VAULT_NAMESPACE=${VAULT_NAMESPACE}
         - VAULT_TOKEN=${VAULT_TOKEN}
     container_name: fiscal_container
-    image: "danlh/fiscal-dash:${DATE}"
+    image: "${DOCKERHUB_USERNAME}/fiscal-dash:${DATE}"
     environment:
       - IMAGE_NAME="${DOCKERHUB_USERNAME}/fiscal-dash:${DATE}"
