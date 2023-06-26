@@ -21,18 +21,19 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Set Date Variable
-        run: echo "::set-output name=DATE::$(date +'%Y%m%d%H%M%S')"
-        
+        run: echo "DATE=$(date +'%Y%m%d%H%M%S')" >> "$GITHUB_ENV"
 
       - name: Build Docker image
         id: build
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DATE: ${{ steps.set_date.outputs.DATE }}
+          DATE: ${{ env.DATE }}
           VAULT_URL: ${{ secrets.VAULT_URL }}
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-        run: docker compose up -d --build
+        run: |
+          echo $DATE
+          docker compose up -d --build
 
       - name: Wait for Pytest to run
         run: sleep 30
