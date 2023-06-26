@@ -48,7 +48,7 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DATE: ${{ env.DATE }}
-        run: docker push $DOCKERHUB_USERNAME:/fiscal-dash:$DATE
+        run: docker push $DOCKERHUB_USERNAME/fiscal-dash:$DATE
 
       - name: Stop and remove container
         run: docker stop fiscal_container && docker rm fiscal_container
