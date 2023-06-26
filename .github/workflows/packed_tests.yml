@@ -27,7 +27,7 @@ jobs:
           VAULT_URL: ${{ secrets.VAULT_URL }}
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
-        run: docker compose up -d
+        run: docker compose up -d --build
 
       - name: Wait for Pytest to run
         run: sleep 30
