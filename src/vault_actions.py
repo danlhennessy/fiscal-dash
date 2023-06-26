@@ -17,19 +17,22 @@ class vault():
 
     def display_secret(self, path):
         response = self.client.secrets.kv.read_secret_version(
-            path=path
+            path=path,
+            raise_on_deleted_version=False
             )
         print(json.dumps(response, indent=4, sort_keys=True))
 
     def get_secret(self, path, key):
         response = self.client.secrets.kv.read_secret_version(
-            path=path
+            path=path,
+            raise_on_deleted_version=False
             )
         return response['data']['data'][key]
 
     def dict_all(self, path):
         response = self.client.secrets.kv.v2.read_secret_version(
-            path=path
+            path=path,
+            raise_on_deleted_version=False
             )
         data = response['data']['data']
         return dict(data)
