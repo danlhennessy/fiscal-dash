@@ -30,8 +30,8 @@ jobs:
           VERSION=$(date +"%Y%m%d%H%M%S")
           IMAGE_TAG=danlh/fiscal-dash:$VERSION
           echo "::set-output name=IMAGE_TAG::$IMAGE_TAG"
-          docker buildx build --platform linux/amd64 -t $IMAGE_TAG --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN . -d --name fiscal_container
-
+          docker buildx build --platform linux/amd64 -t $IMAGE_TAG --build-arg VAULT_URL=$VAULT_URL --build-arg VAULT_NAMESPACE=$VAULT_NAMESPACE --build-arg VAULT_TOKEN=$VAULT_TOKEN .
+          docker run -d --name fiscal_container $IMAGE_TAG
 
       - name: Wait for Pytest to run
         run: sleep 30
