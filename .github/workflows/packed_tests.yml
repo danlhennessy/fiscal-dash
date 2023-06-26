@@ -21,13 +21,14 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Set Date Variable
-        run: echo "::set-env name=DATE::$(date +'%Y%m%d%H%M%S')"
+        run: echo "::set-output name=DATE::$(date +'%Y%m%d%H%M%S')"
         
 
       - name: Build Docker image
         id: build
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DATE: ${{ steps.set_date.outputs.DATE }}
           VAULT_URL: ${{ secrets.VAULT_URL }}
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
