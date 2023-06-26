@@ -23,6 +23,7 @@ jobs:
       - name: Build Docker image
         id: build
         env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           VAULT_URL: ${{ secrets.VAULT_URL }}
           VAULT_NAMESPACE: ${{ secrets.VAULT_NAMESPACE }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
