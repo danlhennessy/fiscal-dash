@@ -12,3 +12,13 @@ services:
     image: "${DOCKERHUB_USERNAME}/fiscal-dash:${DATE}"
     environment:
       - IMAGE_NAME="${DOCKERHUB_USERNAME}/fiscal-dash:${DATE}"
+    networks:
+      default:
+        ipv4_address: 172.17.0.2
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.17.0.0/16
