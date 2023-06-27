@@ -4,7 +4,7 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
 <br> 
 <br> 
 
-## Features
+## Cluster Features
 <br> 
 <table>
     <tr>
@@ -38,12 +38,6 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
         <td>Continuous Deployment - Synchronise app manifests with Kubernetes</td>
     </tr>
     <tr>
-        <td>Secrets Management</td>
-        <td><img width="48" src="https://www.nicepng.com/png/full/827-8272881_vault-logo-black-and-white-hashicorp-vault-logo.png"></td>
-        <td><a href="https://www.vaultproject.io/">Vault</a></td>
-        <td>Hashicorp Vault cluster for all project secrets, connection established with Github Actions environment secrets</td>
-    </tr>
-    <tr>
         <td>Infrastructure Provisioning</td>
         <td><img width="56" src="https://cncf-branding.netlify.app/img/projects/crossplane/icon/color/crossplane-icon-color.png"></td>
         <td><a href="https://www.crossplane.io/">Crossplane</a></td>
@@ -56,10 +50,28 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
         <td>Package management - configure app versioning, repositories and dependencies</td>
     </tr>
     <tr>
+        <td>Storage Operator</td>
+        <td><img width="48" src="https://cncf-branding.netlify.app/img/projects/rook/icon/color/rook-icon-color.png"></td>
+        <td><a href="https://rook.io/">Rook</a></td>
+        <td>Cloud native storage orchestrator - link with distributed storage solution</td>
+    </tr>
+    <tr>
         <td>Service Mesh</td>
-        <td><img width="48" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Istio-bluelogo-nobackground-unframed.svg/1365px-Istio-bluelogo-nobackground-unframed.svg.png"></td>
+        <td><img width="42" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Istio-bluelogo-nobackground-unframed.svg/1365px-Istio-bluelogo-nobackground-unframed.svg.png"></td>
         <td><a href="https://istio.io/">Istio</a></td>
         <td>Cluster networking management and observability</td>
+    </tr>
+    <tr>
+        <td>Policy Enforcement</td>
+        <td><img width="48" src="https://landscape.cncf.io/logos/open-policy-agent-opa.svg"></td>
+        <td><a href="https://www.openpolicyagent.org/">Open Policy Agent</a></td>
+        <td>Polic-based control - manages and evaluates policies against incoming requests and configuration changes</td>
+    </tr>
+    <tr>
+        <td>Vulnerability Scanning</td>
+        <td><img width="48" src="https://api.civo.com/k3s-marketplace/kube-hunter.png"></td>
+        <td><a href="https://github.com/aquasecurity/kube-hunter">kube-hunter</a></td>
+        <td>Dynamic security tests (passive and active). Highlights potential threats </td>
     </tr>
     <tr>
         <td>Monitoring</td>
@@ -74,16 +86,44 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
         <td>Log management and delivery with Elastic Cloud on Kubernetes. Beats -> ElasticSearch -> Kibana</td>
     </tr>
     <tr>
-        <td>Instrumentation</td>
-        <td><img width="48" src="https://cncf-branding.netlify.app/img/projects/opentelemetry/icon/color/opentelemetry-icon-color.png"></td>
-        <td><a href="https://opentelemetry.io/">OpenTelemetry</a></td>
-        <td>OpenTelemetry integration with app for additional metrics and traces</td>
+        <td>APM</td>
+        <td><img width="48" src="https://static-www.elastic.co/v3/assets/bltefdd0b53724fa2ce/blt5ceddec3c8f0ca55/5d082bb6877575d0584761ac/logo-apm-32-color.svg"></td>
+        <td><a href="https://www.elastic.co/guide/en/cloud-on-k8s/2.8/k8s-apm-server.html">Elastic APM Server</a></td>
+        <td>Application Performance Monitoring - integrated with ECK service</td>
     </tr>
     <tr>
         <td>Troubleshooting</td>
         <td><img width="48" src="https://lh5.googleusercontent.com/-hf9J6_pbnTk/AAAAAAAAAAI/AAAAAAAAAAA/-Ewgawd0NH4/s44-p-k-no-ns-nd/photo.jpg"></td>
         <td><a href="https://komodor.com/">Komodor</a></td>
         <td>Cluster troubleshooting platform - health monitoring and automated root cause detection</td>
+    </tr>
+    <tr>
+        <td>Disaster Recovery</td>
+        <td><img width="48" src="https://velero.io/img/Velero.svg"></td>
+        <td><a href="https://velero.io/">Velero</a></td>
+        <td>Data backups, migration and disaster recovery for cluster resources and PVs</td>
+    </tr>
+    <tr>
+        <td>Secrets Management</td>
+        <td><img width="48" src="https://www.nicepng.com/png/full/827-8272881_vault-logo-black-and-white-hashicorp-vault-logo.png"></td>
+        <td><a href="https://www.vaultproject.io/">Vault</a></td>
+        <td>Hashicorp Vault cluster for all project secrets, connection established with Github Actions environment secrets</td>
+    </tr>
+    <!-- Add more rows for other tools -->
+</table>
+<br>
+
+## Application Features
+<br>
+
+### Fiscal Dash
+<br>
+<table>
+    <tr>
+        <th>Feature</th>
+        <th></th>
+        <th>Tool</th>
+        <th>Description</th>
     </tr>
     <tr>
         <td>RBAC</td>
@@ -109,11 +149,26 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
         <td><a href="https://www.mysql.com/">MySQL</a></td>
         <td>MySQL database hosted in an Amazon RDS. Interact securely via Flask app or API</td>
     </tr>
+    <tr>
+        <td>Instrumentation</td>
+        <td><img width="48" src="https://cncf-branding.netlify.app/img/projects/opentelemetry/icon/color/opentelemetry-icon-color.png"></td>
+        <td><a href="https://opentelemetry.io/">OpenTelemetry</a></td>
+        <td>OpenTelemetry configured for additional metrics and traces</td>
+    </tr>
+    <tr>
+        <td>Security Testing (Static)</td>
+        <td><img width="48" src="https://files.readme.io/bb9fa64-bandit-logo.png"></td>
+        <td><a href="https://github.com/PyCQA/bandit">Bandit</a></td>
+        <td>Security linter automatically ran during Continuous Integration checks</td>
+    </tr>
+    <tr>
+        <td>Security Testing (Dynamic)</td>
+        <td><img width="48" src="https://avatars.githubusercontent.com/u/6716868?s=280&v=4"></td>
+        <td><a href="https://www.zaproxy.org/">OWASP ZAP</a></td>
+        <td>Dynamic security tests for semi-deployed and deployed application</td>
+    </tr>
     <!-- Add more rows for other tools -->
 </table>
-
-
-
 
 ## Getting Started
 
