@@ -36,9 +36,9 @@ jobs:
           docker compose up -d --build
 
       - name: ZAP Scan
-        uses: docker://owasp/zap2docker-stable:latest
+        uses: zaproxy/action-baseline@v0.7.0
         with:
-          args: zap-baseline.py -t http://fiscal_container:5000 -r baseline.html
+          target: '127.0.0.1:5000/'
         
 
       - name: Create 'mylogs' directory
@@ -47,7 +47,6 @@ jobs:
       - name: Retrieve App and Container Logs
         run: |
           docker logs fiscal_container > mylogs/container_logs.txt 2>&1
-          cp baseline.html > mylogs/baseline.html
 
       - name: Archive Logs Directory as Artifact
         uses: actions/upload-artifact@v3
