@@ -38,7 +38,7 @@ jobs:
       - name: ZAP Scan
         uses: zaproxy/action-baseline@v0.7.0
         with:
-          target: '127.0.0.1:5000/'
+          target: 'http://127.0.0.1:5000/'
         
 
       - name: Create 'mylogs' directory
