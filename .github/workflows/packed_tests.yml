@@ -50,7 +50,7 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DATE: ${{ env.DATE }}
         with:
-          image-ref: '$DOCKERHUB_USERNAME/fiscal-dash:$DATE'
+          image-ref: $DOCKERHUB_USERNAME/fiscal-dash:$DATE
           format: 'sarif'
           output: 'mylogs/trivy-results.sarif'
   
