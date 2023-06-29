@@ -6,7 +6,7 @@ metadata:
     component: backend
     instance: app
     name: fiscal-dash
-  namespace: fiscal-ns
+  namespace: fiscal-ns-dev
 spec:
   selector:
     component: backend
