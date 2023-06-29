@@ -2,6 +2,10 @@ name: 2. Packed Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Target branch'
+        required: true
 
 jobs:
   build:
