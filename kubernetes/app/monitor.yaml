@@ -11,7 +11,7 @@ metadata:
 spec:
   namespaceSelector:
     matchNames:
-    - fiscal-ns
+    - fiscal-ns-dev
   selector:
     matchLabels:
       component: backend
