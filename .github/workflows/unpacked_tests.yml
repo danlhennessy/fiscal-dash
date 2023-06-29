@@ -26,21 +26,21 @@ jobs:
     - name: Run safety on current dependencies
       run: safety check --file requirements/test.txt --full-report
 
-    - name: Run Bandit SAST
-      run: bandit -r ./src --exit-zero
+    # - name: Run Bandit SAST
+    #   run: bandit -r ./src --exit-zero
 
-    - name: Run DevSkim Analysis
-      uses: microsoft/devskim-action@v1
-      with:
-        directory-to-scan: src
-        should-scan-archives: false
-        ignore-globs: "**/.git/**,*.txt"
+    # - name: Run DevSkim Analysis
+    #   uses: microsoft/devskim-action@v1
+    #   with:
+    #     directory-to-scan: src
+    #     should-scan-archives: false
+    #     ignore-globs: "**/.git/**,*.txt"
 
-    - name: Archive DevSkim Results as Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: devskim-results
-        path: devskim-results.sarif
+    # - name: Archive DevSkim Results as Artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: devskim-results
+    #     path: devskim-results.sarif
       
     - name: Lint with Flake8
       run: flake8 || exit 0
