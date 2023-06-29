@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: fiscal-dash
-        image: danlh/fiscal-dash:20230629201152
+        image: danlh/fiscal-dash:2024535343425
         ports:
         - containerPort: 5000
           name: webapp
