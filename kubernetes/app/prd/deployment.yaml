@@ -6,6 +6,7 @@ metadata:
     component: backend
     instance: app
     name: fiscal-dash
+    app: fiscal-dash
   namespace: fiscal-ns
 spec:
   replicas: 1
@@ -14,12 +15,14 @@ spec:
       component: backend
       instance: app
       name: fiscal-dash
+      app: fiscal-dash
   template:
     metadata:
       labels:
         component: backend
         instance: app
         name: fiscal-dash
+        app: fiscal-dash
     spec:
       containers:
       - name: fiscal-dash

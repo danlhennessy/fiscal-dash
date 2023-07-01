@@ -6,17 +6,19 @@ metadata:
     component: backend
     instance: app
     name: fiscal-dash
+    app: fiscal-dash
     release: kube-prometheus-stack # Prometheus release name
   namespace: monitoring # Namespace of Prometheus
 spec:
   namespaceSelector:
     matchNames:
-    - fiscal-ns-dev
+    - fiscal-ns
   selector:
     matchLabels:
       component: backend
       instance: app
       name: fiscal-dash
+      app: fiscal-dash
   endpoints:
   - port: http # Port name from service
     path: /metrics
