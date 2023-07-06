@@ -120,3 +120,4 @@ report.html
 kubernetes/monitoring/setup.md
 logs/assets/style.css
 docker-compose-local.yaml
+docker-compose2.yaml

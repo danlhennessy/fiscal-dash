@@ -14,7 +14,7 @@ deprecated==1.2.14
     # via opentelemetry-api
 dill==0.3.6
     # via pylint
-exceptiongroup==1.1.1
+exceptiongroup==1.1.2
     # via pytest
 flake8==6.0.0
     # via -r requirements/test.in
@@ -96,7 +96,7 @@ pyyaml==6.0
     # via bandit
 rich==13.4.2
     # via bandit
-ruff==0.0.275
+ruff==0.0.277
     # via -r requirements/test.in
 smmap==5.0.0
     # via gitdb
@@ -104,7 +104,7 @@ stevedore==5.1.0
     # via bandit
 tomlkit==0.11.8
     # via pylint
-typing-extensions==4.6.3
+typing-extensions==4.7.1
     # via
     #   astroid
     #   opentelemetry-sdk

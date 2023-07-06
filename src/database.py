@@ -23,9 +23,12 @@ if os.environ.get('DOCKER_ENV') == 'true':
     database_user = fiscal_dict['AWS_DB_USER']
     database_port = '3306'
 else:
-    database_host = 'localhost'  # (Node IP)
-    database_user = 'root'
-    database_port = '30007'  # (Node Port)
+    # database_host = 'localhost'  # (Node IP)
+    # database_user = 'root'
+    # database_port = '30007'  # (Node Port)
+    database_host = fiscal_dict['AWS_DB_HOST']
+    database_user = fiscal_dict['AWS_DB_USER']
+    database_port = '3306'
 
 FISCALDB = mysql.connector.connect(
     host=database_host,
