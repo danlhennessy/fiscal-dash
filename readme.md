@@ -2,7 +2,6 @@
 
 Python Flask app designed to test the capabilities of Kubernetes and container tools / addons.
 <br> 
-<br> 
 
 ## Application Features
 <br>
@@ -60,6 +59,7 @@ Python Flask app designed to test the capabilities of Kubernetes and container t
     </tr>
     <!-- Add more rows for other tools -->
 </table>
+<br>
 
 ## Getting Started
 
