@@ -56,11 +56,8 @@ dev:
     # Sync files between the local filesystem and the development container
     sync:
       - path: ./src:/app/src
-        uploadExcludeFile: .dockerignore
       - path: ./tests:/app/tests
-        uploadExcludeFile: .dockerignore
       - path: ./requirements:/app/requirements
-        uploadExcludeFile: .dockerignore
     # Open a terminal and use the following command to start it
     terminal:
       command: ./devspace_start.sh
