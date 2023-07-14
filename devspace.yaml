@@ -47,12 +47,19 @@ deployments:
 dev:
   app:
     # Search for the container that runs this image
-    imageSelector: my-image-registry.tld/username/app
+    # imageSelector: my-image-registry.tld/username/app
     # Replace the container image with this dev-optimized image (allows to skip image building during development)
-    devImage: ghcr.io/loft-sh/devspace-containers/python:3-alpine
+    # devImage: ghcr.io/loft-sh/devspace-containers/python:3-alpine
+    labelSelector:
+      app: fiscal-dash
+      instance: app
     # Sync files between the local filesystem and the development container
     sync:
-      - path: ./
+      - path: ./src:/app/src
+        uploadExcludeFile: .dockerignore
+      - path: ./tests:/app/tests
+        uploadExcludeFile: .dockerignore
+      - path: ./requirements:/app/requirements
         uploadExcludeFile: .dockerignore
     # Open a terminal and use the following command to start it
     terminal:

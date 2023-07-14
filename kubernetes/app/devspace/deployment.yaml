@@ -7,7 +7,6 @@ metadata:
     instance: app
     name: fiscal-dash
     app: fiscal-dash
-  namespace: fiscal-ns
 spec:
   replicas: 3
   selector:
