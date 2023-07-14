@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: fiscal-dash
+        pod-index: "$(POD_INDEX)"
     spec:
       containers:
       - name: fiscal-dash
@@ -18,6 +19,11 @@ spec:
         ports:
         - containerPort: 5000
           name: webapp
+        env:
+        - name: POD_INDEX
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['pod-index']
         envFrom:
         - secretRef:
             name: fiscal-secrets
