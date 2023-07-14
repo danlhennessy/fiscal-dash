@@ -43,6 +43,19 @@ pipelines:
 #           ports:
 #             - port: 5000
 
+images:
+  app:
+    image: danlh/fiscal-dash:20230701104721
+    dockerfile: ./Dockerfile
+
+# This is a list of `deployments` that DevSpace can create for this project
+deployments:
+  app:
+    # This deployment uses `kubectl` but you can also define `helm` deployments
+    kubectl:
+      manifests:
+        - kubernetes/app/devspace
+
 # This is a list of `dev` containers that are based on the containers created by your deployments
 dev:
   app:
@@ -52,7 +65,6 @@ dev:
     # devImage: ghcr.io/loft-sh/devspace-containers/python:3-alpine
     labelSelector:
       app: fiscal-dash
-      instance: app
     # Sync files between the local filesystem and the development container
     sync:
       - path: ./src:/app/src
