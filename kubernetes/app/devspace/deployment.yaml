@@ -2,20 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: fiscal-dash
-  labels:
-    component: backend
-    instance: app
-    name: fiscal-dash
-    app: fiscal-dash
-    devspace: 3
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      component: backend
-      instance: app
-      name: fiscal-dash
-      app: fiscal-dash
+  replicas: 3
   template:
     metadata:
       labels:
