@@ -4,12 +4,12 @@ metadata:
   name: fiscal-dash
 spec:
   replicas: 3
+  selector:
+    matchLabels:
+      app: fiscal-dash
   template:
     metadata:
       labels:
-        component: backend
-        instance: app
-        name: fiscal-dash
         app: fiscal-dash
     spec:
       containers:

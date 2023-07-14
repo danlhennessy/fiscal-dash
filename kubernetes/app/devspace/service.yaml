@@ -3,15 +3,9 @@ kind: Service
 metadata:
   name: webapp
   labels:
-    component: backend
-    instance: app
-    name: fiscal-dash
     app: fiscal-dash
 spec:
   selector:
-    component: backend
-    instance: app
-    name: fiscal-dash
     app: fiscal-dash
   type: ClusterIP
   ports:
