@@ -29,3 +29,6 @@ spec:
         ports:
         - containerPort: 5000
           name: webapp
+        envFrom:
+        - secretRef:
+            name: fiscal-secrets
