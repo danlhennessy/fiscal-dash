@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.29.0 (997957870)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: fiscal-container
+  name: fiscal-container
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: fiscal-container
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.29.0 (997957870)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/fiscal-dash-default: "true"
+        io.kompose.service: fiscal-container
+    spec:
+      containers:
+        - env:
+            - name: IMAGE_NAME
+              value: '"danlh/fiscal-dash:20230701104721"'
+          image: danlh/fiscal-dash:20230701104721
+          name: fiscal-container
+          resources: {}
+          envFrom:
+          - secretRef:
+              name: vault-secrets
+      restartPolicy: Always
+status: {}
