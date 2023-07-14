@@ -76,7 +76,8 @@ dev:
       - port: "5000"
     # Open the following URLs once they return an HTTP status code other than 502 or 503
     open:
-      - url: http://localhost:5000
+      - url: http://localhost:5000/
+      - url: http://localhost:8089/
 
 # Use the `commands` section to define repeatable dev workflows for this project 
 commands:

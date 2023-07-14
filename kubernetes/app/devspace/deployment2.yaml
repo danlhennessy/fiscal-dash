@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: fiscal-dash
+  labels:
+    component: backend
+    instance: app
+    name: fiscal-dash
+    app: fiscal-dash
+    devspace: 2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: backend
+      instance: app
+      name: fiscal-dash
+      app: fiscal-dash
+  template:
+    metadata:
+      labels:
+        component: backend
+        instance: app
+        name: fiscal-dash
+        app: fiscal-dash
+    spec:
+      containers:
+      - name: fiscal-dash
+        image: danlh/fiscal-dash:20230701104721
+        ports:
+        - containerPort: 5000
+          name: webapp
+        envFrom:
+        - secretRef:
+            name: fiscal-secrets
